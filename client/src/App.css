@@ -1,0 +1,5 @@
+@import 'tailwindcss';
+
+.MY_TABLE_ROW:hover {
+  background-color: var(--color-grey-900);
+}

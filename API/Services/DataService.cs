@@ -3,6 +3,7 @@ using System.Data;
 using System.Linq.Expressions;
 using API.Domain;
 using API.Persistence;
+using API.Persistence.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace API.Services;

@@ -1,4 +1,5 @@
 using System;
+using API.Persistence.Models;
 
 namespace API.Domain.Identity;
 

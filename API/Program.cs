@@ -1,4 +1,6 @@
+using API.Infrastructure;
 using API.Persistence;
+using API.Persistence.Models.Domain;
 using API.Services;
 using Microsoft.EntityFrameworkCore;
 
@@ -14,14 +16,15 @@ builder.Services.AddDbContext<AppDbContext>(opt =>
     opt.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 
-builder.Services.AddTransient<IItemService, IItemService>();
 builder.Services.AddControllers();
 builder.Services.AddCors();
+builder.Services.AddAutoMapper(config => config.AddProfile<MappingProfiles>());
 
-// builder.Services.AddDbContext<AppDbContext>(opt =>
-// {
-//     opt.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
-// });
+builder.Services.AddTransient<IItemService, ItemService>();
+builder.Services.AddTransient<IDataService<Initiative>, DataService<Initiative>>();
+builder.Services.AddTransient<IDataService<Person>, DataService<Person>>();
+
+
 
 var app = builder.Build();
 
@@ -40,6 +43,9 @@ app.UseCors(x =>
 
 
 
+// app.UseAuthentication();
+// app.UseAuthorization();
+
 // app.UseDefaultFiles();
 // app.UseStaticFiles();
 
@@ -57,8 +63,8 @@ try
 {
     var context = services.GetRequiredService<AppDbContext>();
     // var userManager = services.GetRequiredService<UserManager<User>>();
-    // await context.Database.MigrateAsync();
-    // await DbInitializer.SeedData(context);
+    await context.Database.MigrateAsync();
+    await DbInitializer.SeedData(context);
 }
 catch (Exception ex)
 {
