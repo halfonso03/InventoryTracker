@@ -11,7 +11,7 @@ export default function PersonItems({ items }: Props) {
 
   return (
     <Box className="text-sm">
-      <Table columns=".1fr .1fr .3fr .3fr .3fr .1fr .2fr .22fr">
+      <Table columns=".1fr .1fr .3fr .3fr .3fr .2fr .15fr .2fr .2fr">
         <Table.Header>
           <Table.Cell>HBC #</Table.Cell>
           <Table.Cell>Type</Table.Cell>
@@ -19,6 +19,7 @@ export default function PersonItems({ items }: Props) {
           <Table.Cell>Description</Table.Cell>
           <Table.Cell>Computer Name</Table.Cell>
           <Table.Cell>Initiative</Table.Cell>
+          <Table.Cell>Date Assigned</Table.Cell>
           <Table.Cell>Cubicle / Room</Table.Cell>
           <Table.Cell>
             <div className="w-full text-center">Actions</div>

@@ -4,6 +4,7 @@ using API.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace API.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250925181135_item_status2")]
+    partial class item_status2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -66,9 +69,6 @@ namespace API.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime?>("DisposalDate")
-                        .HasColumnType("datetime2");
-
                     b.Property<string>("HbcNumber")
                         .HasColumnType("nvarchar(max)");
 
@@ -78,16 +78,16 @@ namespace API.Migrations
                     b.Property<int?>("InitiativeId")
                         .HasColumnType("int");
 
-                    b.Property<int>("ItemStatus")
-                        .HasColumnType("int")
-                        .HasColumnName("ItemStatusId");
-
                     b.Property<int>("ItemType")
                         .HasColumnType("int")
                         .HasColumnName("ItemTypeId");
 
                     b.Property<string>("SerialNumber")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int")
+                        .HasColumnName("ItemStatusId");
 
                     b.HasKey("Id");
 

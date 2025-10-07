@@ -1,5 +1,6 @@
 using System;
 using System.ComponentModel.DataAnnotations;
+using API.Persistence.Models.Domain;
 
 namespace API.DTOs;
 
@@ -9,34 +10,29 @@ public class ItemDto
 
     [Required]
     public required string Description { get; set; }
-
-    [Required]
-    public required DateTime CreatedOn { get; set; }
-
     public string? HbcNumber { get; set; } = null;
-
     public string? ComputerName { get; set; } = null;
 
-    public string? SerialNumber { get; set; } = null;
+    [Required]
+    public string SerialNumber { get; set; } = null;
 
-    public required int ItemTypeId { get; set; }
+    [Required]
+    public int ItemTypeId { get; set; }
+    public string? ItemType { get; set; } = null;
 
-    public required string ItemType { get; set; }
-
-
-
+    [Required]
+    public int ItemStatusId { get; set; }
+    public string? ItemStatus { get; set; } = null;
     public int InitiativeId { get; set; }
-
     public string? Initiative { get; set; }
-
     public DateTime? DateAssigned { get; set; }
-
-    public int AssignedToId { get; set; }
-
+    public DateTime? DisposalDate { get; set; }
+    public int? AssignedToId { get; set; } = null;
     public string? AssignedTo { get; set; }
     public string? AssignedToEmail { get; set; }
     public string? AssignedToExtension { get; set; }
-
     public string? Cubicle_Room { get; set; }
+    public string? IPAddress { get; set; }
+    public DateTime CreatedOn { get; set; }
 
 }

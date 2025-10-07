@@ -46,7 +46,7 @@ interface ITable extends FC<TableProps> {
 const CommonRow = styled.div<CommonRowProps>`
   display: grid;
   grid-template-columns: ${(props) => props.$columns};
-  column-gap: 1.25rem;
+  /* column-gap: 1.25rem; */
   align-items: center;
   transition: none;
 `;

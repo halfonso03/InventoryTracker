@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import Table from '../../ui/Table';
+import { formatDate } from 'date-fns';
 
 type Props = {
   item: Item;
@@ -8,12 +9,13 @@ type Props = {
 export default function ItemRow({ item }: Props) {
   const navigate = useNavigate();
 
-  function gotoPerson(assignedToId: number) {
+  function gotoPerson(assignedToId: number | undefined) {
+    if (!assignedToId) return;
     navigate(`/person/${assignedToId}`);
   }
 
   function gotoItem(id: number) {
-    navigate(`${id}`);
+    navigate(`/inventory/${id}`);
   }
 
   return (
@@ -36,11 +38,22 @@ export default function ItemRow({ item }: Props) {
       <div className="cursor-pointer" onClick={() => gotoItem(item.id)}>
         {item.initiative}
       </div>
-      <div className="cursor-pointer" onClick={() => gotoItem(item.id)}>
+      <div
+        className="cursor-pointer text-center"
+        onClick={() => gotoItem(item.id)}
+      >
         {item.cubicle_Room}
       </div>
       <div
-        className="border-l-2 pl-4 border-gray-700 cursor-pointer"
+        className="cursor-pointer text-center"
+        onClick={() => gotoItem(item.id)}
+      >
+        <div>
+          {item.dateAssigned && formatDate(item.dateAssigned, 'M/d/yy')}
+        </div>
+      </div>
+      <div
+        className="border-gray-900 cursor-pointer"
         onClick={() => gotoPerson(item.assignedToId)}
       >
         {item.assignedTo && (
@@ -50,6 +63,16 @@ export default function ItemRow({ item }: Props) {
             <div>{item.assignedToExtension}</div>
           </div>
         )}
+      </div>
+      <div>{item.ipAddress}</div>
+      <div
+        className={`text-center ${
+          item.itemStatusId == 3 ? 'text-yellow-600' : ''
+        }`}
+      >
+        {item.itemStatusId == 3
+          ? item.itemStatus
+          : item.itemStatus.substring(0, 1)}
       </div>
     </Table.Row>
   );

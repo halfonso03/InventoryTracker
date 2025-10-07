@@ -62,20 +62,20 @@ namespace API.Controllers
             return Ok();
         }
 
-        [HttpPut("update")]
-        public async Task<IActionResult> Update([FromBody] EditItemDto dto)
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Update(int id, [FromBody] EditItemDto dto)
         {
             if (ModelState.IsValid)
             {
                 var item = _mapper.Map<Item>(dto);
 
-                await _itemDataService.Update(item.Id, item);
+                await _itemDataService.Update(id, item);
 
                 return Ok();
             }
             return Ok();
         }
 
-       
+
     }
 }

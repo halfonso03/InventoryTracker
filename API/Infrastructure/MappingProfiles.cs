@@ -20,16 +20,19 @@ public class MappingProfiles : Profile
 
 
         CreateMap<ItemDto, Item>();
-        CreateMap<CreateItemDto, Item>();
-        CreateMap<EditItemDto, Item>();
+        CreateMap<CreateItemDto, Item>()
+                .ForMember(dest => dest.ItemType, o => o.MapFrom(s => (ItemType)s.ItemTypeId));
 
+        CreateMap<EditItemDto, Item>()
+                .ForMember(dest => dest.ItemType, o => o.MapFrom(s => (ItemType)s.ItemTypeId));
 
         CreateMap<Item, ItemDto>()
             .ForMember(dest => dest.AssignedTo, o => o.MapFrom(s => s.AssignedTo.FirstName + " " + s.AssignedTo.LastName))
             .ForMember(dest => dest.AssignedToEmail, o => o.MapFrom(s => s.AssignedTo.Email))
             .ForMember(dest => dest.AssignedToExtension, o => o.MapFrom(s => s.AssignedTo.Extension))
             .ForMember(dest => dest.Initiative, o => o.MapFrom(s => s.Initiative != null ? s.Initiative.Name : ""))
-            .ForMember(dest => dest.ItemTypeId, o => o.MapFrom(s => (int)s.ItemType));
+            .ForMember(dest => dest.ItemTypeId, o => o.MapFrom(s => (int)s.ItemType))
+            .ForMember(dest => dest.ItemStatusId, o => o.MapFrom(s => (int)s.ItemStatus));
 
         // from  -> to
         CreateMap<Initiative, InitiativeDto>();

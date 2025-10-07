@@ -1,5 +1,5 @@
 import { useParams } from 'react-router-dom';
-import { usePerson } from '../../api/hooks/usePerson';
+import { usePersonItems } from '../../api/hooks/usePersonItems';
 import { Box } from '../../ui/Box';
 import PersonItems from './PersonItems';
 import PersonForm from './PersonForm';
@@ -8,7 +8,7 @@ export default function PersonDetails() {
   const params = useParams();
   const id = params.id!;
 
-  const { person, loadingPerson } = usePerson(+id);
+  const { person, loadingPerson } = usePersonItems(+id);
 
   if (loadingPerson) return 'Loading...';
 
@@ -19,9 +19,7 @@ export default function PersonDetails() {
       <Box className="border-2 border-amber-800 w-[65%]">
         <PersonForm person={person}></PersonForm>
         <PersonItems items={person?.items}></PersonItems>
-
       </Box>
-
     </Box>
   );
 }

@@ -46,7 +46,32 @@ public class ItemService(AppDbContext context) : IItemService
 
     public async Task<Item> Update(int id, Item entity)
     {
-        throw new NotImplementedException();
+        Item? itemFromDb = await context.Items.FirstOrDefaultAsync(x => x.Id == id);
+
+        if (itemFromDb is not null)
+        {
+
+            itemFromDb.HbcNumber = entity.HbcNumber;
+            itemFromDb.ItemType = entity.ItemType;
+            itemFromDb.Description = entity.Description;
+            itemFromDb.SerialNumber = entity.SerialNumber;
+            itemFromDb.IPAddress = entity.IPAddress;
+            itemFromDb.ComputerName = entity.ComputerName;
+
+            itemFromDb.InitiativeId = entity.InitiativeId;
+            itemFromDb.Cubicle_Room = entity.Cubicle_Room;
+            itemFromDb.AssignedToId = entity.AssignedToId;
+            
+            if (entity.AssignedToId == null)
+            {
+                itemFromDb.DateAssigned = null;
+                itemFromDb.ItemStatus = ItemStatus.Unassigned;
+            }
+
+            await context.SaveChangesAsync();
+        }
+
+        return entity;
     }
 
     public async Task<bool> Delete(int id)

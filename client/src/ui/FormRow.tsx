@@ -8,9 +8,10 @@ type FormRowProps = {
   label?: string;
   children: ReactNode;
   error?: string | FieldError | Merge<FieldError, FieldErrorsImpl>;
-  useMessage?: boolean;
+  minimalWarning?: boolean;
   swidth?: string | null;
   className?: string;
+  labelBackgroundColor?: string;
 };
 
 const StyledFormRow = styled.div`
@@ -47,13 +48,20 @@ const FormRow: FC<FormRowProps> = ({
   label,
   error,
   children,
-  useMessage,
+  minimalWarning = true,
   className,
+  labelBackgroundColor,
 }: FormRowProps) => {
   return (
     <StyledFormRow style={{}} className={className}>
       {label && (
-        <div>
+        <div
+          style={{
+            padding: '10px 10px 10px 10px',
+            background: labelBackgroundColor,
+            marginRight: '10px',
+          }}
+        >
           <Label
             htmlFor={id}
             style={{
@@ -67,12 +75,12 @@ const FormRow: FC<FormRowProps> = ({
       )}
       <div>{children}</div>
       <div className="pl-2">
-        {error && useMessage && <Error>{error.toString()}</Error>}
-        {error && !useMessage && (
+        {error && !minimalWarning && (
           <Error>
             <BsFillExclamationTriangleFill></BsFillExclamationTriangleFill>
           </Error>
         )}
+        {error && minimalWarning && <Error>{error.toString()}</Error>}
       </div>
     </StyledFormRow>
   );

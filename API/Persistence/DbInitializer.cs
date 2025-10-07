@@ -39,7 +39,11 @@ public class DbInitializer
                 Initiative = context.Initiatives.First(),
                 AssignedTo = context.People.First(),
                 DateAssigned = DateTime.Now,
-                Cubicle_Room = "123"
+                Cubicle_Room = "123",
+                IPAddress = "255.255.67.78",
+                ItemStatus = ItemStatus.Assigned,
+                SerialNumber = "HUJI-OOOO-PPPP-:):):)"
+
             };
 
             var item2 = new Item
@@ -50,7 +54,9 @@ public class DbInitializer
                 Initiative = context.Initiatives.First(),
                 AssignedTo = context.People.First(),
                 DateAssigned = DateTime.Now,
-                Cubicle_Room = "456"
+                Cubicle_Room = "456",
+                IPAddress = "255.255.67.78",
+                ItemStatus = ItemStatus.Assigned
             };
 
             var item3 = new Item
@@ -61,7 +67,8 @@ public class DbInitializer
                 Initiative = context.Initiatives.OrderBy(x => x.Id).Last(),
                 AssignedTo = context.People.OrderBy(x => x.Id).Last(),
                 DateAssigned = DateTime.Now,
-                Cubicle_Room = "789"
+                Cubicle_Room = "789",
+                ItemStatus = ItemStatus.Assigned
             };
 
             var item4 = new Item
@@ -69,10 +76,28 @@ public class DbInitializer
                 Description = "Monitor 2",
                 CreatedOn = DateTime.Now.AddDays(-1),
                 ItemType = ItemType.Monitor,
-                Cubicle_Room = "789"
+                Cubicle_Room = "789",
+                ItemStatus = ItemStatus.Unassigned
             };
 
-            context.Items.AddRange([item1, item2, item3, item4]);
+            var item5 = new Item
+            {
+                Description = "Monitor 3",
+                CreatedOn = DateTime.Now.AddDays(-1),
+                ItemType = ItemType.Monitor,
+                Cubicle_Room = "4564",
+                ItemStatus = ItemStatus.TBD
+            };
+
+            var item6 = new Item
+            {
+                Description = "iPhone 15",
+                CreatedOn = DateTime.Now.AddDays(-1),
+                ItemType = ItemType.MobilePhone,
+                ItemStatus = ItemStatus.Disposed
+            };
+
+            context.Items.AddRange([item1, item2, item3, item4, item5, item6]);
         }
 
         await context.SaveChangesAsync();

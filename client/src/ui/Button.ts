@@ -16,7 +16,7 @@ const sizes = {
   `,
   medium: css`
     font-size: 1rem !important;
-    padding: .4rem 1rem;
+    padding: .5rem 1rem .4rem 1rem;
     font-weight: 500;
   `,
   large: css`
@@ -52,6 +52,9 @@ const variations = {
     border: 1px solid var(--color-red-900);
     &:hover {
       background-color: var(--color-red-800);
+    };
+    &:disabled {
+      opacity: .7;
     }
   `,
   danger2: css`

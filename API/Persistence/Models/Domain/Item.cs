@@ -1,5 +1,4 @@
 using System;
-using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 
@@ -8,20 +7,26 @@ namespace API.Persistence.Models.Domain;
 public enum ItemType
 {
     Desktop = 1,
-    Server,
-    Switch,
-    Monitor,
-    Printer,
-    MobilePhone,
-    Misc
+    Server = 2,
+    Switch = 3,
+    Monitor = 4,
+    Printer = 5,
+    MobilePhone = 6,
+    Misc = 7
+}
+
+public enum ItemStatus
+{
+    Unassigned = 1,
+    Assigned = 2,
+    TBD = 3,
+    Disposed = 4
 }
 
 public class Item : BaseEntity
 {
-    [Required]
     public required string Description { get; set; }
 
-    [Required]
     public required DateTime CreatedOn { get; set; }
 
     public string? HbcNumber { get; set; } = null;
@@ -38,7 +43,6 @@ public class Item : BaseEntity
 
     public Initiative? Initiative { get; set; }
 
-
     public DateTime? DateAssigned { get; set; }
 
     [ForeignKey("AssignedTo")]
@@ -49,6 +53,13 @@ public class Item : BaseEntity
 
     public string? Cubicle_Room { get; set; }
 
+    public string? IPAddress { get; set; }
+
+    [Column("ItemStatusId")]
+    public ItemStatus ItemStatus { get; set; }
+
+
+    public DateTime? DisposalDate { get; set; }
     // public AppUser CreatedBy { get; set; } = null!;
 
     // [Required]

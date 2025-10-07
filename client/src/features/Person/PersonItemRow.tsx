@@ -1,7 +1,9 @@
 import { useState } from 'react';
 import Table from '../../ui/Table';
 import { BsFillXSquareFill } from 'react-icons/bs';
-import { HiCheckCircle, HiXCircle } from 'react-icons/hi2';
+import { HiCheckCircle, HiTrash } from 'react-icons/hi2';
+import { formatDate } from 'date-fns';
+
 type Props = {
   item: Item;
 };
@@ -23,6 +25,7 @@ export default function PersonItemRow({ item }: Props) {
       <div>{item.description}</div>
       <div>{item.computerName}</div>
       <div>{item.initiative}</div>
+      <div>{item.dateAssigned && formatDate(item.dateAssigned, 'M/d/yy')}</div>
       <div>{item.cubicle_Room}</div>
       <div className="cursor-pointer text-center ">
         {confirmingUnassign ? (
@@ -43,7 +46,7 @@ export default function PersonItemRow({ item }: Props) {
             onClick={() => confirmUnassign()}
             className="text-yellow-500 text-xl w-full flex justify-center"
           >
-            <HiXCircle></HiXCircle>
+            <HiTrash></HiTrash>
           </div>
         )}
       </div>

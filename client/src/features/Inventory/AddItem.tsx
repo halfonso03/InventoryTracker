@@ -1,6 +1,10 @@
+import { useNavigate } from 'react-router-dom';
+import { Box } from '../../ui/Box';
+import ButtonText from '../../ui/ButtonText';
 import ItemForm from './ItemForm';
 
 export default function AddItem() {
+  const navigate = useNavigate();
   const defaultValues: Item = {
     id: 0,
     description: '',
@@ -12,7 +16,17 @@ export default function AddItem() {
     assignedToId: 0,
     itemTypeId: 0,
     itemType: '',
+    ipAddress: '',
   };
 
-  return <ItemForm item={defaultValues}></ItemForm>;
+  return (
+    <>
+      <Box className="text-end mb-5">
+        <ButtonText onClick={() => navigate('/inventory')}>
+          &larr; Back
+        </ButtonText>
+      </Box>
+      <ItemForm item={defaultValues}></ItemForm>
+    </>
+  );
 }
