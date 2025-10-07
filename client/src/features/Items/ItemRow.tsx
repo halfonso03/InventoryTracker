@@ -64,9 +64,15 @@ export default function ItemRow({ item }: Props) {
           </div>
         )}
       </div>
-      <div>{item.ipAddress}</div>
       <div
-        className={`text-center ${
+        className="cursor-pointer text-center"
+        onClick={() => gotoItem(item.id)}
+      >
+        {item.ipAddress}
+      </div>
+      <div
+        onClick={() => gotoItem(item.id)}
+        className={`cursor-pointer text-center ${
           item.itemStatusId == 3 ? 'text-yellow-600' : ''
         }`}
       >

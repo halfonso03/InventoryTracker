@@ -13,8 +13,8 @@ public class ItemDto
     public string? HbcNumber { get; set; } = null;
     public string? ComputerName { get; set; } = null;
 
-    [Required]
-    public string SerialNumber { get; set; } = null;
+    // [Required]
+    public string? SerialNumber { get; set; }
 
     [Required]
     public int ItemTypeId { get; set; }
@@ -23,7 +23,7 @@ public class ItemDto
     [Required]
     public int ItemStatusId { get; set; }
     public string? ItemStatus { get; set; } = null;
-    public int InitiativeId { get; set; }
+    public int? InitiativeId { get; set; } = null;
     public string? Initiative { get; set; }
     public DateTime? DateAssigned { get; set; }
     public DateTime? DisposalDate { get; set; }

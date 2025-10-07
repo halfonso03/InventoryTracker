@@ -4,7 +4,8 @@ type Sizes = 'small' | 'medium' | 'large';
 
 interface ButtonProps {
   variation: ButtonType;
-  size?: Sizes
+  size?: Sizes;
+  selected?: boolean
 }
 
 const sizes = {
@@ -74,6 +75,7 @@ const Button = styled.button<ButtonProps>`
   box-shadow: var(--shadow-sm);
   ${(props) => variations[props.variation]}
   ${(props) => !props.size ? sizes['medium'] : sizes[props.size]}
+  ${(props) => props.selected && { outline: '2px solid var(--color-brand-600)', background: 'var(--color-grey-800)' }}
  
 `;
 

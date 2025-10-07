@@ -16,7 +16,7 @@ export default function UpdateItem() {
 
   return (
     <>
-      <Box className="text-end mb-12">
+      <Box className="text-end mb-5">
         <ButtonText onClick={() => navigate('/inventory')}>
           &larr; Back
         </ButtonText>

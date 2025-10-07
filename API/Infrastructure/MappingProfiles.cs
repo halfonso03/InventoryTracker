@@ -12,13 +12,6 @@ public class MappingProfiles : Profile
     public MappingProfiles()
     {
 
-        // CreateMap<Trip, Trip>();
-
-        // CreateMap<Trip, TripDto>()
-        //     .ForMember(x => x.Status, o => o.MapFrom(s => (s.Status == null) ? "" : s.Status.Description))
-        //     .ForMember(x => x.TravellerName, o => o.MapFrom(s => s.Traveller != null ? s.Traveller.FirstName + " " + s.Traveller.LastName : ""));
-
-
         CreateMap<ItemDto, Item>();
         CreateMap<CreateItemDto, Item>()
                 .ForMember(dest => dest.ItemType, o => o.MapFrom(s => (ItemType)s.ItemTypeId));

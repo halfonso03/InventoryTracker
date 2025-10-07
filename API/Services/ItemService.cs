@@ -3,6 +3,7 @@ using API.DTOs;
 using API.Persistence;
 using API.Persistence.Models.Domain;
 using AutoMapper;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore;
 
 namespace API.Services;
@@ -10,6 +11,7 @@ namespace API.Services;
 public interface IItemService : IDataService<Item>
 {
     Task<Person?> GetPersonItems(int id);
+    Task<List<Item>> GetAll(ItemStatus? itemStatus);
 }
 
 public class ItemService(AppDbContext context) : IItemService
@@ -36,6 +38,18 @@ public class ItemService(AppDbContext context) : IItemService
 
     public async Task<int> Create(Item entity)
     {
+        if (entity.AssignedToId != null)
+        {
+            entity.DateAssigned = DateTime.Now;
+            entity.ItemStatus = ItemStatus.Assigned;
+        }
+        else
+        {
+            entity.ItemStatus = ItemStatus.Unassigned;
+        }
+
+        entity.CreatedOn = DateTime.Now;
+
         context.Items.Add(entity);
         await context.SaveChangesAsync();
         return entity.Id;
@@ -60,13 +74,20 @@ public class ItemService(AppDbContext context) : IItemService
 
             itemFromDb.InitiativeId = entity.InitiativeId;
             itemFromDb.Cubicle_Room = entity.Cubicle_Room;
-            itemFromDb.AssignedToId = entity.AssignedToId;
-            
-            if (entity.AssignedToId == null)
+
+            if (entity.AssignedToId == null && itemFromDb.AssignedToId != null)
             {
                 itemFromDb.DateAssigned = null;
                 itemFromDb.ItemStatus = ItemStatus.Unassigned;
             }
+
+            if (entity.AssignedToId != null && itemFromDb.AssignedToId == null)
+            {
+                itemFromDb.DateAssigned = DateTime.Now;
+                itemFromDb.ItemStatus = ItemStatus.Assigned;
+            }
+
+            itemFromDb.AssignedToId = entity.AssignedToId;
 
             await context.SaveChangesAsync();
         }
@@ -87,5 +108,22 @@ public class ItemService(AppDbContext context) : IItemService
                     .FirstOrDefaultAsync(x => x.Id == id);
 
         return person;
+    }
+
+    public async Task<List<Item>> GetAll(ItemStatus? itemStatus)
+    {
+
+        IQueryable<Item> items = itemStatus switch
+        {
+            ItemStatus.Assigned
+                or ItemStatus.Unassigned
+                or ItemStatus.TBD
+                or ItemStatus.Disposed => context.Items.Where(x => x.ItemStatus == itemStatus),
+            _ => context.Items.Where(x => x.ItemStatus != ItemStatus.Disposed)
+        };
+
+        return await items.Include(x => x.AssignedTo)
+                            .Include(x => x.Initiative)
+                            .ToListAsync();
     }
 }

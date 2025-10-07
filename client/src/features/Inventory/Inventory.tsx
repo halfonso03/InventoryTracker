@@ -4,18 +4,66 @@ import Table from '../../ui/Table';
 import Button from '../../ui/Button';
 import Header from '../../ui/Header';
 import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
 
 export default function Inventory() {
-  const { items, loadingItems } = useInventory();
+  const [filter, setFilter] = useState<string>('');
+  const { items, loadingItems } = useInventory(filter);
   const navigate = useNavigate();
 
   if (loadingItems) return 'Loading...';
+
+  function filterInventory(itemStatusId: string = '') {
+    setFilter(itemStatusId);
+  }
+  // Unassigned = 1,
+  //   Assigned = 2,
+  //   TBD = 3,
+  //   Disposed = 4
+
   return (
     <>
       <Header>
         <div className="flex justify-between">
-          <div></div>
-          <div>
+          <div className="w-1/3"></div>
+          <div className="w-1/3 flex justify-center gap-3">
+            <Button
+              variation="secondary"
+              selected={filter === ''}
+              onClick={() => filterInventory()}
+            >
+              All
+            </Button>
+            <Button
+              variation="secondary"
+              selected={filter === '2'}
+              onClick={() => filterInventory('2')}
+            >
+              Assigned
+            </Button>
+            <Button
+              variation="secondary"
+              selected={filter === '1'}
+              onClick={() => filterInventory('1')}
+            >
+              Unassigned
+            </Button>
+            <Button
+              variation="secondary"
+              selected={filter === '3'}
+              onClick={() => filterInventory('3')}
+            >
+              TDB
+            </Button>
+            <Button
+              variation="secondary"
+              selected={filter === '4'}
+              onClick={() => filterInventory('4')}
+            >
+              Disposal
+            </Button>
+          </div>
+          <div className="w-1/3 text-end">
             <Button
               variation="primary"
               onClick={() => navigate('/inventory/new')}

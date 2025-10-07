@@ -25,7 +25,7 @@ type Props = {
 export default function ItemForm({ item }: Props) {
   const { people } = usePeople();
   const { initiatives } = useInitiative();
-  const { createItem, isCreating } = useInventory();
+  const { createItem, updateItem } = useInventory();
 
   const peopleOptions = people
     ? people?.map((p: Person) => ({
@@ -45,12 +45,16 @@ export default function ItemForm({ item }: Props) {
     ...peopleOptions,
   ];
 
-  const initiativeOptions = initiatives
-    ? initiatives.map((i: Initiative) => ({
-        value: i.id.toString(),
-        text: i.name,
-      }))
-    : [];
+  const initiativeOptions = [
+    { value: '0', text: 'Unassigned' },
+    ...(initiatives
+      ? initiatives.map((i: Initiative) => ({
+          value: i.id.toString(),
+          text: i.name,
+        }))
+      : []),
+  ];
+  console.log('item', item);
 
   const {
     handleSubmit,
@@ -69,18 +73,22 @@ export default function ItemForm({ item }: Props) {
       description: item.description,
       computerName: item.computerName,
       hbcNumber: item.hbcNumber,
-      assignedToId: item.assignedToId,
+      assignedToId: item.assignedToId ?? 0,
       ipAddress: item.ipAddress,
-      initiativeId: item.initiativeId,
+      initiativeId: item.initiativeId ?? 0,
       cubicle_Room: item.cubicle_Room,
       itemTypeId: item.itemTypeId,
     },
   });
 
   const onSubmit: SubmitHandler<ItemFormData> = async (data) => {
+    if (data.assignedToId === 0) data.assignedToId = null;
+    if (data.initiativeId === 0) data.initiativeId = null;
     if (item.id === 0) {
       console.log('data', data);
-      // createItem(data);
+      createItem(data);
+    } else {
+      updateItem(data);
     }
   };
 
@@ -100,7 +108,8 @@ export default function ItemForm({ item }: Props) {
       className="flex-col w-full"
       onSubmit={handleSubmit(onSubmit, onError)}
     >
-      {isCreating && <div>Creating...</div>}
+      {/* {isCreating && <div>Creating...</div>}
+      {isUpdating && <div>Updating...</div>} */}
       <div className="flex w-full">
         <div className="w-2/5">
           <FormRow

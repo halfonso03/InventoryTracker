@@ -20,17 +20,17 @@ namespace API.Controllers
             _mapper = mapper;
         }
 
-        [HttpGet()]
-        public async Task<IActionResult> Get()
-        {
-            var items = await _itemDataService.GetAll();
+        [HttpGet("{itemStatusId?}")]
+        public async Task<IActionResult> Get(ItemStatus? itemStatusId = null)
+        {            
+            var items = await _itemDataService.GetAll(itemStatusId);
 
             var response = _mapper.Map<List<ItemDto>>(items);
 
             return Ok(response);
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("item/{id}")]
         public async Task<IActionResult> GetItem(int id)
         {
             var item = await _itemDataService.Get(id);
@@ -49,17 +49,19 @@ namespace API.Controllers
                 {
                     var item = _mapper.Map<Item>(dto);
 
-                    await _itemDataService.Create(item);
+                    int newId = await _itemDataService.Create(item);
 
-                    return Ok();
+                    dto.Id = newId;
+
+                    return Ok(dto);
                 }
                 catch (Exception ex)
                 {
-                    return BadRequest(ex.Message);
+                    return BadRequest(ex.InnerException?.Message);
                 }
             }
 
-            return Ok();
+            return Ok(dto);
         }
 
         [HttpPut("{id}")]
@@ -67,13 +69,24 @@ namespace API.Controllers
         {
             if (ModelState.IsValid)
             {
-                var item = _mapper.Map<Item>(dto);
 
-                await _itemDataService.Update(id, item);
+                try
+                {
+                    var item = _mapper.Map<Item>(dto);
 
-                return Ok();
+                    await _itemDataService.Update(id, item);
+
+                    return Ok(dto);
+                }
+                catch (System.Exception ex)
+                {
+
+                    return BadRequest(ex.Message);
+                }
+
             }
-            return Ok();
+
+            return Ok(dto);
         }
 
 

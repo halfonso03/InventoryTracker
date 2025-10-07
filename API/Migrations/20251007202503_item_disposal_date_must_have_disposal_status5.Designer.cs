@@ -4,6 +4,7 @@ using API.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace API.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251007202503_item_disposal_date_must_have_disposal_status5")]
+    partial class item_disposal_date_must_have_disposal_status5
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -95,10 +98,7 @@ namespace API.Migrations
 
                     b.HasIndex("InitiativeId");
 
-                    b.ToTable("Items", t =>
-                        {
-                            t.HasCheckConstraint("CK_Item_Disposal", "([itemStatusId] <> 4 AND [DisposalDate] IS NULL) OR ([itemStatusId] = 4 AND NOT [DisposalDate] IS NULL)");
-                        });
+                    b.ToTable("Items");
                 });
 
             modelBuilder.Entity("API.Persistence.Models.Domain.Person", b =>

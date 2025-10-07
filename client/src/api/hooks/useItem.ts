@@ -8,7 +8,7 @@ export const useItem = (id: number) => {
     const { data: item, isLoading: loadingItem } = useQuery({
         queryKey: ['items', id],
         queryFn: async () => {
-            const response = await agent.get<Item>('/inventory/' + id);
+            const response = await agent.get<Item>('/inventory/item/' + id);
 
             const parsedItem: Item = {
                 ...response.data,

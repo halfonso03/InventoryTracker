@@ -15,9 +15,23 @@ public class AppDbContext : DbContext
     {
     }
 
+    // public enum ItemStatus
+    // {
+    //     Unassigned = 1,
+    //     Assigned = 2,
+    //     TBD = 3,
+    //     Disposed = 4
+    // }
+
     protected override void OnModelCreating(ModelBuilder builder)
     {
 
+        builder.Entity<Item>().ToTable(b =>
+        {
+            b.HasCheckConstraint("CK_Item_Disposal",
+                "([itemStatusId] <> 4 AND [DisposalDate] IS NULL) OR ([itemStatusId] = 4 AND NOT [DisposalDate] IS NULL)");
+            
+        });
 
         base.OnModelCreating(builder);
     }
