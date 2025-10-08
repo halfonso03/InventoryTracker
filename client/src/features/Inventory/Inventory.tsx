@@ -4,29 +4,31 @@ import Table from '../../ui/Table';
 import Button from '../../ui/Button';
 import Header from '../../ui/Header';
 import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
 import { Box } from '../../ui/Box';
 import { usePagination } from '../../app/contexts/usePagination';
 import { Pagination } from '../../ui/Pagination';
 
 export default function Inventory() {
-  const [filter, setFilter] = useState<string>('');
-  const { itemResults, loadingItems } = useInventory(filter);
+  
   const navigate = useNavigate();
 
-  const { setPageNumber } = usePagination();
+  const { setPageNumber, setItemStatusFilter, itemStatusFilter } = usePagination();
+  const { itemResults, loadingItems } = useInventory(itemStatusFilter);
+
   const paginationData = itemResults?.pagination;
 
   if (loadingItems) return 'Loading...';
 
   function filterInventory(itemStatusId: string = '') {
     setPageNumber(1);
-    setFilter(itemStatusId);
+    setItemStatusFilter(itemStatusId);
   }
 
   function onSetPageNumber(pageNumber: number) {
     setPageNumber(pageNumber);
   }
+
+  console.log('filter', itemStatusFilter);
 
   // Unassigned = 1,
   //   Assigned = 2,
@@ -44,7 +46,7 @@ export default function Inventory() {
             <Button
               variation="secondary"
               className="self-start"
-              selected={filter === ''}
+              selected={itemStatusFilter === ''}
               onClick={() => filterInventory()}
             >
               All
@@ -52,7 +54,7 @@ export default function Inventory() {
             <Button
               variation="secondary"
               className="self-start"
-              selected={filter === '2'}
+              selected={itemStatusFilter === '2'}
               onClick={() => filterInventory('2')}
             >
               Assigned
@@ -60,7 +62,7 @@ export default function Inventory() {
             <Button
               className="self-start"
               variation="secondary"
-              selected={filter === '1'}
+              selected={itemStatusFilter === '1'}
               onClick={() => filterInventory('1')}
             >
               Unassigned
@@ -68,7 +70,7 @@ export default function Inventory() {
             <Button
               variation="secondary"
               className="self-start"
-              selected={filter === '3'}
+              selected={itemStatusFilter === '3'}
               onClick={() => filterInventory('3')}
             >
               TDB
@@ -76,7 +78,7 @@ export default function Inventory() {
             <Button
               variation="secondary"
               className="self-start"
-              selected={filter === '4'}
+              selected={itemStatusFilter === '4'}
               onClick={() => filterInventory('4')}
             >
               Disposal

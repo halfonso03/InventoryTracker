@@ -4,6 +4,8 @@ import { PaginationContext } from './PaginationContext';
 export interface PaginationContextType {
   pageNumber: number;
   setPageNumber: (pageNumber: number) => void;
+  itemStatusFilter: string;
+  setItemStatusFilter: (itemStatus: string) => void;
 }
 
 interface PaginationContextProviderProps {
@@ -14,10 +16,13 @@ export const PaginationContextProvider = ({
   children,
 }: PaginationContextProviderProps) => {
   const [pageNumber, setPageNumber] = useState<number>(1);
+  const [itemStatusFilter, setItemStatusFilter] = useState<string>('');
 
   const contextValue: PaginationContextType = {
     pageNumber,
     setPageNumber,
+    itemStatusFilter,
+    setItemStatusFilter,
   };
 
   return (
