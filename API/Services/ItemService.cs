@@ -1,4 +1,5 @@
 using System;
+using System.Resources;
 using API.DTOs;
 using API.Persistence;
 using API.Persistence.Models.Domain;
@@ -11,7 +12,9 @@ namespace API.Services;
 public interface IItemService : IDataService<Item>
 {
     Task<Person?> GetPersonItems(int id);
-    Task<List<Item>> GetAll(ItemStatus? itemStatus);
+    IQueryable<Item> GetAll(ItemStatus? itemStatus);
+
+    Task<Item?> ToggleDisposal(int id);
 }
 
 public class ItemService(AppDbContext context) : IItemService
@@ -110,7 +113,7 @@ public class ItemService(AppDbContext context) : IItemService
         return person;
     }
 
-    public async Task<List<Item>> GetAll(ItemStatus? itemStatus)
+    public IQueryable<Item> GetAll(ItemStatus? itemStatus)
     {
 
         IQueryable<Item> items = itemStatus switch
@@ -122,8 +125,36 @@ public class ItemService(AppDbContext context) : IItemService
             _ => context.Items.Where(x => x.ItemStatus != ItemStatus.Disposed)
         };
 
-        return await items.Include(x => x.AssignedTo)
+        return items.Include(x => x.AssignedTo)
                             .Include(x => x.Initiative)
-                            .ToListAsync();
+                            .AsQueryable();
+
+    }
+
+    public async Task<Item?> ToggleDisposal(int id)
+    {
+        var item = await context.Items.FirstOrDefaultAsync(x => x.Id == id);
+
+        if (item != null)
+        {
+            if (item.DisposalDate is not null)
+            {
+                item.ItemStatus = ItemStatus.Unassigned;
+                item.DisposalDate = null;
+            }
+            else
+            {
+                item.AssignedToId = null;
+                item.DateAssigned = null;
+                item.ItemStatus = ItemStatus.Disposed;
+                item.DisposalDate = DateTime.Now;
+            }
+
+            await context.SaveChangesAsync();
+
+            return item;
+        }
+
+        return null;
     }
 }

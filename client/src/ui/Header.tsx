@@ -9,7 +9,6 @@ const StyledHeader = styled.div`
   color: var(--color-grey-100);
   background-color: var(--color-grey-900);
   letter-spacing: 0.9px;
-  margin-bottom: 1.5rem;
   font-size: 1.5rem;
 `;
 

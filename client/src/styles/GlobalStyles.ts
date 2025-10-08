@@ -66,6 +66,8 @@ export const GlobalStyles = createGlobalStyle`:root {
   *:disabled {
     cursor: not-allowed;
   }
+
+  
   
   input,
   textarea,
@@ -371,6 +373,25 @@ export const GlobalStyles = createGlobalStyle`:root {
   display: -webkit-box;
   -webkit-line-clamp: 2; /* Specifies the maximum number of lines */
   -webkit-box-orient: vertical;
+}
+
+
+.page-link-active {
+  color: var(--color-brand-100);
+  background-color: var(--color-brand-600);
+  border-radius: 5px;
+  border:1px solid var(--color-gray-600)
+}
+.page-link {
+  border:1px solid transparent
+
+}
+
+.page-link:hover {
+   color: var(--color-brand-100);
+  background-color: var(--color-brand-600);
+  border-radius: 5px;
+  border:1px solid var(--color-gray-600)
 }
 
 `;

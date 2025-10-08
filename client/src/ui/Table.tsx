@@ -13,6 +13,7 @@ interface TableProps {
 
 interface TableRowProps {
   children: ReactNode;
+  onClick: () => void;
 }
 
 interface TableHeaderProps {
@@ -28,6 +29,7 @@ interface CellProps {
   children: ReactNode;
   align?: string;
   textoverflow?: string;
+  className?: string;
   onClick?: () => void;
 }
 
@@ -73,7 +75,7 @@ const StyledRow = styled(CommonRow).attrs({
 })`
   border-bottom: 1px solid var(--color-gray-700);
   transition: background-color 0.2s ease-in-out;
-  padding: 0.9rem;
+  padding: 0.5rem 0.7rem;
   /* font-size: 0.9rem; */
 `;
 
@@ -108,7 +110,7 @@ const StyledFooter = styled.footer`
   background-color: var(--color-grey-900);
   display: flex;
   justify-content: end;
-  padding: 1.2rem;
+  padding: .9rem;
   border-top: 1px solid var(--color-gray-800);
 
   /* This will hide the footer when it contains no child elements. Possible thanks to the parent selector :has 🎉 */
@@ -155,18 +157,34 @@ const Body: FC<TableBodyProps> = ({ data, render }) => {
   return <StyledBody>{data.map(render)}</StyledBody>;
 };
 
-const Row: FC<TableRowProps> = ({ children }) => {
+const Row: FC<TableRowProps> = ({ children, onClick }) => {
   const { columns } = useContext<TableContextType>(TableContext as any);
   return (
-    <StyledRow $columns={columns} role="row">
+    <StyledRow
+      $columns={columns}
+      role="row"
+      onClick={onClick}
+      className={onClick != null ? 'cursor-pointer' : ''}
+    >
       {children}
     </StyledRow>
   );
 };
 
-const Cell: FC<CellProps> = ({ children, align, textoverflow, onClick }) => {
+const Cell: FC<CellProps> = ({
+  children,
+  align,
+  textoverflow,
+  onClick,
+  className,
+}) => {
   return (
-    <StyledCell align={align} textoverflow={textoverflow} onClick={onClick}>
+    <StyledCell
+      align={align}
+      textoverflow={textoverflow}
+      onClick={onClick}
+      className={className}
+    >
       {children}
     </StyledCell>
   );

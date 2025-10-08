@@ -1,7 +1,9 @@
+using System.Text.Json.Serialization;
 using API.Infrastructure;
 using API.Persistence;
 using API.Persistence.Models.Domain;
 using API.Services;
+using Microsoft.AspNetCore.Http.Json;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -20,11 +22,26 @@ builder.Services.AddControllers();
 builder.Services.AddCors();
 builder.Services.AddAutoMapper(config => config.AddProfile<MappingProfiles>());
 
+// builder.Services.Configure<JsonOptions>(config =>
+// {
+//     config.SerializerOptions.ReferenceHandler = ReferenceHandler.Preserve;
+// });
+
 builder.Services.AddTransient<IItemService, ItemService>();
 builder.Services.AddTransient<IDataService<Initiative>, DataService<Initiative>>();
 builder.Services.AddTransient<IDataService<Person>, DataService<Person>>();
 
-
+builder.Services.AddCors(opt =>
+            {
+                opt.AddPolicy("CorsPolicy", policy =>
+                {
+                    policy
+                        .AllowAnyHeader()
+                        .AllowAnyMethod()
+                        .AllowCredentials()
+                        .WithOrigins("https://localhost:3000");
+                });
+            });
 
 var app = builder.Build();
 
@@ -35,17 +52,13 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-app.UseCors(x =>
-    x.AllowAnyHeader()
-    .AllowAnyMethod()
-    .AllowCredentials()
-    .WithOrigins("http://localhost:3000", "https://localhost:3000"));
+app.UseCors("CorsPolicy");
+
 
 
 
 // app.UseAuthentication();
 // app.UseAuthorization();
-
 // app.UseDefaultFiles();
 // app.UseStaticFiles();
 

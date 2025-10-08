@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import Table from '../../ui/Table';
 import { formatDate } from 'date-fns';
+import type { SyntheticEvent } from 'react';
 
 type Props = {
   item: Item;
@@ -19,59 +20,35 @@ export default function ItemRow({ item }: Props) {
   }
 
   return (
-    <Table.Row>
-      <div className="cursor-pointer" onClick={() => gotoItem(item.id)}>
-        {item.hbcNumber}
-      </div>
-      <div className="cursor-pointer" onClick={() => gotoItem(item.id)}>
-        {item.itemType}
-      </div>
-      <div className="cursor-pointer" onClick={() => gotoItem(item.id)}>
-        {item.serialNumber}
-      </div>
-      <div className="cursor-pointer" onClick={() => gotoItem(item.id)}>
-        {item.description}
-      </div>
-      <div className="cursor-pointer" onClick={() => gotoItem(item.id)}>
-        {item.computerName}
-      </div>
-      <div className="cursor-pointer" onClick={() => gotoItem(item.id)}>
-        {item.initiative}
-      </div>
-      <div
-        className="cursor-pointer text-center"
-        onClick={() => gotoItem(item.id)}
-      >
-        {item.cubicle_Room}
-      </div>
-      <div
-        className="cursor-pointer text-center"
-        onClick={() => gotoItem(item.id)}
-      >
+    <Table.Row onClick={() => gotoItem(item.id)}>
+      <div className="cursor-pointer">{item.id}</div>
+      <div className="cursor-pointer">{item.hbcNumber}</div>
+      <div className="cursor-pointer">{item.itemType}</div>
+      <div className="cursor-pointer">{item.serialNumber}</div>
+      <div className="cursor-pointer">{item.description}</div>
+      <div className="cursor-pointer">{item.computerName}</div>
+      <div className="cursor-pointer">{item.initiative}</div>
+      <div className="cursor-pointer text-center">{item.cubicle_Room}</div>
+      <div className="cursor-pointer text-center">
         <div>
           {item.dateAssigned && formatDate(item.dateAssigned, 'M/d/yy')}
         </div>
       </div>
       <div
         className="border-gray-900 cursor-pointer"
-        onClick={() => gotoPerson(item.assignedToId)}
+        onClick={(e: SyntheticEvent<HTMLDivElement>) => {
+          e.stopPropagation();
+          gotoPerson(item.assignedToId);
+        }}
       >
         {item.assignedTo && (
           <div>
             <div>{item.assignedTo}</div>
-            <div>{item.assignedToEmail}</div>
-            <div>{item.assignedToExtension}</div>
           </div>
         )}
       </div>
+      <div className="cursor-pointer text-center">{item.ipAddress}</div>
       <div
-        className="cursor-pointer text-center"
-        onClick={() => gotoItem(item.id)}
-      >
-        {item.ipAddress}
-      </div>
-      <div
-        onClick={() => gotoItem(item.id)}
         className={`cursor-pointer text-center ${
           item.itemStatusId == 3 ? 'text-yellow-600' : ''
         }`}

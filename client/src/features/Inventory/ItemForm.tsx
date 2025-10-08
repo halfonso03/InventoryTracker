@@ -1,5 +1,6 @@
 import { useForm, type SubmitHandler } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
+//import toast from 'react-hot-toast';
 
 import {
   itemFormSchema,
@@ -16,16 +17,21 @@ import { useInitiative } from '../../api/hooks/useInitiative';
 import { formatDate } from 'date-fns';
 import { Box } from '../../ui/Box';
 import Button from '../../ui/Button';
-import { useInventory } from '../../api/hooks/useInventory';
+// import { useItem } from '../../api/hooks/useItem';
 
 type Props = {
-  item: Item;
+  item?: Item;
+  submit: (item: ItemFormData) => void;
+  toggleDisposal?: () => void;
 };
 
-export default function ItemForm({ item }: Props) {
+export default function ItemForm({ item, submit, toggleDisposal }: Props) {
   const { people } = usePeople();
   const { initiatives } = useInitiative();
-  const { createItem, updateItem } = useInventory();
+
+  if (item) {
+    // console.log('item', item);
+  }
 
   const peopleOptions = people
     ? people?.map((p: Person) => ({
@@ -54,13 +60,11 @@ export default function ItemForm({ item }: Props) {
         }))
       : []),
   ];
-  console.log('item', item);
 
   const {
     handleSubmit,
     register,
     setValue,
-    reset,
     getValues,
     trigger,
     formState: { errors },
@@ -68,50 +72,58 @@ export default function ItemForm({ item }: Props) {
     mode: 'onSubmit',
     resolver: yupResolver(itemFormSchema),
     defaultValues: {
-      id: item.id,
-      serialNumber: item.serialNumber,
-      description: item.description,
-      computerName: item.computerName,
-      hbcNumber: item.hbcNumber,
-      assignedToId: item.assignedToId ?? 0,
-      ipAddress: item.ipAddress,
-      initiativeId: item.initiativeId ?? 0,
-      cubicle_Room: item.cubicle_Room,
-      itemTypeId: item.itemTypeId,
+      id: item?.id,
+      serialNumber: item?.serialNumber,
+      description: item?.description,
+      computerName: item?.computerName,
+      hbcNumber: item?.hbcNumber,
+      assignedToId: item?.assignedToId ?? 0,
+      ipAddress: item?.ipAddress,
+      initiativeId: item?.initiativeId ?? 0,
+      cubicle_Room: item?.cubicle_Room,
+      itemTypeId: item?.itemTypeId,
     },
   });
 
   const onSubmit: SubmitHandler<ItemFormData> = async (data) => {
     if (data.assignedToId === 0) data.assignedToId = null;
     if (data.initiativeId === 0) data.initiativeId = null;
-    if (item.id === 0) {
-      console.log('data', data);
-      createItem(data);
-    } else {
-      updateItem(data);
-    }
+
+    trigger('itemTypeId');
+
+    submit(data!);
   };
 
-  function resetForm() {
-    reset();
-  }
-
   function onError<ItemFormData>(errors: ItemFormData | undefined) {
-    console.log('errors', errors, getValues());
+    console.log('validation errors', errors, getValues());
   }
 
-  useEffect(() => {}, [item.assignedToId, item.itemTypeId, setValue]);
+  useEffect(() => {
+    if (peopleOptions?.length > 0 && item?.assignedToId) {
+      setValue('assignedToId', item.assignedToId);
+    }
+    if (initiativeOptions?.length > 0 && item?.initiativeId) {
+      setValue('initiativeId', item.initiativeId);
+    }
+  }, [initiativeOptions?.length, item, peopleOptions?.length, setValue]);
+
+  if (!item) return;
 
   return (
-    //onSubmit={handleSubmit(onSubmit)}
     <Form
       className="flex-col w-full"
       onSubmit={handleSubmit(onSubmit, onError)}
     >
-      {/* {isCreating && <div>Creating...</div>}
-      {isUpdating && <div>Updating...</div>} */}
       <div className="flex w-full">
         <div className="w-2/5">
+          <FormRow label="Id" id="Item Id">
+            <Input
+              readOnly
+              value={item.id}
+              {...register('id')}
+              disabled
+            ></Input>
+          </FormRow>
           <FormRow
             label="Type"
             id="itemTypeId"
@@ -249,29 +261,29 @@ export default function ItemForm({ item }: Props) {
               }
             ></Input>
           </FormRow>
-          <FormRow label="&nbsp;" id="">
-            {item.id !== 0 && (
+          {item.id != 0 && (
+            <FormRow label="&nbsp;" id="">
               <Box className="flex w-full justify-end my-4">
-                <Button variation="danger" disabled={item.disposalDate != null}>
-                  Move to Disposal
+                <Button
+                  variation="danger"
+                  type="button"
+                  className="w-[15rem]"
+                  // disabled={toggleDisposal.isPending}
+                  onClick={toggleDisposal}
+                >
+                  {item.itemStatusId == 4
+                    ? 'Remove from Disposal'
+                    : 'Move to Disposal'}
                 </Button>
               </Box>
-            )}
-          </FormRow>
+            </FormRow>
+          )}
         </div>
       </div>
 
       <div className=" flex justify-between my-8 w-4/5">
         <Box className="flex gap-3">
-          <Button
-            variation="primary"
-            children="Save"
-            type="submit"
-            onClick={() => trigger('itemTypeId')}
-          ></Button>
-          <Button variation="secondary" onClick={resetForm}>
-            Cancel
-          </Button>
+          <Button variation="primary" children="Save" type="submit"></Button>
         </Box>
       </div>
     </Form>

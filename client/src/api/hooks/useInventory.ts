@@ -1,59 +1,37 @@
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
+import { useQuery } from "@tanstack/react-query"
 import agent from "../agent"
-import type { ItemFormData } from "../../form_schemas/itemSchema";
-import { useNavigate } from "react-router-dom";
+import { usePagination } from "../../app/contexts/usePagination";
+import { formatItem } from "../../helpers/ItemHelpers";
 
 
 
 export const useInventory = (itemStatusId?: string) => {
 
-    const queryClient = useQueryClient();
-    const navigate = useNavigate();
+    // const queryClient = useQueryClient();
+    // const navigate = useNavigate();
+    const { pageNumber } = usePagination();
+    // const location = useLocation();
 
-    console.log('itemStatusId', itemStatusId)
-
-    const { data: items, isLoading: loadingItems } = useQuery({
-        queryKey: ['inventory', itemStatusId],
+    const { data: itemResults, isLoading: loadingItems } = useQuery({
+        queryKey: ['inventory', itemStatusId, pageNumber],
         staleTime: 0,
         queryFn: async () => {
-            const response = await agent.get<Item[]>(`/inventory/${itemStatusId}`);
+            const response = await agent.get<Item[]>(`/inventory/items/${itemStatusId}`,
+                {
+                    params: { pageNumber }
+                }
+            );
 
-            const parsedItems: Item[] = response.data.map(r => ({
-                ...r,
-                createdOn: new Date(r.createdOn),
-                dateAssigned: r.dateAssigned ? new Date(r.dateAssigned) : null,
-            }));
-
-            return parsedItems;
+            const items: Item[] = response.data.map(formatItem);
+            const paginationHeader = response.headers['pagination'];
+            const pagination: PaginationData = paginationHeader ? JSON.parse(paginationHeader) : null;
+            return { items, pagination };
         },
         enabled: itemStatusId != undefined
     })
 
-    const { mutate: createItem, isPending: isCreating, isSuccess: created } = useMutation({
-        mutationFn: async (item: ItemFormData) => {
-            const response = await agent.post(`inventory`, item)
-            console.log('response', response.data)
-            return response.data;
-        },
-        onSuccess: (item: Item) => {
-            console.log('create item', item)
-            navigate(`/inventory/${item.id}`);
-        }
-    })
 
-    const { mutate: updateItem, isPending: isUpdating, isSuccess: updated } = useMutation({
-        mutationFn: async (item: ItemFormData) => {
-            const response = await agent.put(`inventory/${item.id}`, item)
-            console.log('response', response.data)
-            return response.data;
-        },
-        onSuccess: (item: Item) => {
-            console.log('item', item)
-            queryClient.invalidateQueries(
-                { queryKey: ['items', item.id] });
-        }
-    })
 
-    return { items, loadingItems, createItem, isCreating, created, updateItem, isUpdating, updated };
+    return { itemResults, loadingItems };
 }
 

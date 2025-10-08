@@ -1,10 +1,13 @@
 using API.DTOs;
+using API.Extensions;
 using API.Persistence.Models.Domain;
+using API.RequestHelpers;
 using API.Services;
 using AutoMapper;
 using HidtaInventory.Controllers;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.Collections.Generic;
 
 namespace API.Controllers
@@ -20,12 +23,30 @@ namespace API.Controllers
             _mapper = mapper;
         }
 
-        [HttpGet("{itemStatusId?}")]
-        public async Task<IActionResult> Get(ItemStatus? itemStatusId = null)
-        {            
-            var items = await _itemDataService.GetAll(itemStatusId);
+        [HttpGet()]
+        public async Task<IActionResult> Get()
+        {
+            var items = await _itemDataService.GetAll();
 
             var response = _mapper.Map<List<ItemDto>>(items);
+
+            return Ok(response);
+        }
+
+        [HttpGet("items/{itemStatusId?}")]
+        public async Task<IActionResult> Get([FromQuery] PaginationParams paginationParams, ItemStatus? itemStatusId = null)
+        {
+            IQueryable<Item> query = _itemDataService
+                                        .GetAll(itemStatusId)
+                                        .OrderBy(x => x.Id);
+
+            var items =
+                await PagedList<Item>.ToPagedList(query, paginationParams.PageNumber, paginationParams.PageSize);
+
+            var response = _mapper.Map<List<ItemDto>>(items);
+
+
+            Response.AddPaginationHeader(items.Metadata);
 
             return Ok(response);
         }
@@ -40,6 +61,8 @@ namespace API.Controllers
             return Ok(response);
         }
 
+
+
         [HttpPost()]
         public async Task<IActionResult> Create([FromBody] CreateItemDto dto)
         {
@@ -50,7 +73,6 @@ namespace API.Controllers
                     var item = _mapper.Map<Item>(dto);
 
                     int newId = await _itemDataService.Create(item);
-
                     dto.Id = newId;
 
                     return Ok(dto);
@@ -69,26 +91,40 @@ namespace API.Controllers
         {
             if (ModelState.IsValid)
             {
-
                 try
                 {
                     var item = _mapper.Map<Item>(dto);
-
                     await _itemDataService.Update(id, item);
 
                     return Ok(dto);
                 }
                 catch (System.Exception ex)
                 {
-
                     return BadRequest(ex.Message);
                 }
-
             }
 
             return Ok(dto);
         }
 
+        [HttpPost("item/dispose/{id}")]
+        public async Task<IActionResult> ToggleDisposal(int id)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    Item? item = await _itemDataService.ToggleDisposal(id);
 
+                    return item is not null ? Ok(item) : NotFound();
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest(ex.InnerException?.Message);
+                }
+            }
+
+            return BadRequest(ModelState.SelectMany(x => x.Key));
+        }
     }
 }

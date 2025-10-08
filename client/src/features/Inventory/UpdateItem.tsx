@@ -1,18 +1,28 @@
 import { useNavigate, useParams } from 'react-router-dom';
-import { useItem } from '../../api/hooks/useItem';
 import ItemForm from './ItemForm';
 import { Box } from '../../ui/Box';
 import ButtonText from '../../ui/ButtonText';
+import { useItem } from '../../api/hooks/useItem';
+import toast from 'react-hot-toast';
 
 export default function UpdateItem() {
   const params = useParams();
   const id = params!.id!;
-  const { item, loadingItem } = useItem(+id);
   const navigate = useNavigate();
 
-  if (!item) return 'Not Found';
+  const { item, updateItem, toggleDisposal } = useItem(+id);
 
-  if (loadingItem) return 'Loading...';
+  async function onToggleDisposal() {
+    await toggleDisposal.mutateAsync(item!.id, {
+      onSuccess: (item) => {
+        if (item.disposalDate) {
+          toast.success('Item moved to disposal');
+        } else {
+          toast.success('Item moved out of disposal');
+        }
+      },
+    });
+  }
 
   return (
     <>
@@ -21,7 +31,11 @@ export default function UpdateItem() {
           &larr; Back
         </ButtonText>
       </Box>
-      <ItemForm item={item}></ItemForm>
+      <ItemForm
+        item={item}
+        submit={updateItem}
+        toggleDisposal={onToggleDisposal}
+      ></ItemForm>
     </>
   );
 }

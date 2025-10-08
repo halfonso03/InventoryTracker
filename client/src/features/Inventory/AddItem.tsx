@@ -2,22 +2,34 @@ import { useNavigate } from 'react-router-dom';
 import { Box } from '../../ui/Box';
 import ButtonText from '../../ui/ButtonText';
 import ItemForm from './ItemForm';
+import { useItem } from '../../api/hooks/useItem';
+import type { ItemFormData } from '../../form_schemas/itemSchema';
 
 export default function AddItem() {
   const navigate = useNavigate();
+
+  const { createItem } = useItem();
+
   const defaultValues: Item = {
     id: 0,
     description: '',
-    createdOn: new Date(),
     hbcNumber: '',
     computerName: '',
     serialNumber: '',
     initiativeId: 0,
     assignedToId: 0,
     itemTypeId: 0,
-    itemType: '',
     ipAddress: '',
+    createdOn: new Date(),
+    itemType: '',
+    itemStatusId: 1,
+    itemStatus: '',
+    disposalDate: null,
   };
+
+  function onSubmit(item: ItemFormData) {
+    createItem(item)
+  }
 
   return (
     <>
@@ -26,7 +38,7 @@ export default function AddItem() {
           &larr; Back
         </ButtonText>
       </Box>
-      <ItemForm item={defaultValues}></ItemForm>
+      <ItemForm item={defaultValues} submit={onSubmit}></ItemForm>
     </>
   );
 }
