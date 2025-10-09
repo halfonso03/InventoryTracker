@@ -56,7 +56,7 @@ const Search = ({ onSearch }: Props) => {
           disabled={!searchTerm}
           onClick={clearSearch}
           style={{
-            borderRadius: '0',
+            borderRadius: '0 5px 5px 0',
             borderTop: '1px solid var(--color-gray-600)',
             borderRight: '1px solid var(--color-gray-600)',
             borderBottom: '1px solid var(--color-gray-600)',
