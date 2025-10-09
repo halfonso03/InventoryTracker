@@ -2,10 +2,7 @@ import { useForm, type SubmitHandler } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 //import toast from 'react-hot-toast';
 
-import {
-  itemFormSchema,
-  type ItemFormData,
-} from '../../form_schemas/itemSchema';
+import { itemFormSchema, type ItemFormData } from '../../schemas/itemSchema';
 import Form from '../../ui/Form';
 import FormRow from '../../ui/FormRow';
 import Select from '../../ui/Select';
@@ -137,7 +134,6 @@ export default function ItemForm({ item, submit, toggleDisposal }: Props) {
               onChange={(e: ChangeEvent<HTMLSelectElement>) => {
                 const seletctedValue = e.target.value;
                 if (seletctedValue == '1' || seletctedValue == '2') {
-                  //  this may not be doing anything
                   trigger('computerName');
                 }
               }}

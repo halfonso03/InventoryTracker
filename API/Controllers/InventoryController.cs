@@ -34,17 +34,17 @@ namespace API.Controllers
         }
 
         [HttpGet("items/{itemStatusId?}")]
-        public async Task<IActionResult> Get([FromQuery] PaginationParams paginationParams, ItemStatus? itemStatusId = null)
+        public async Task<IActionResult> Get([FromQuery] PaginationParams paginationParams, string? searchTerm = null, ItemStatus? itemStatusId = null)
         {
             IQueryable<Item> query = _itemDataService
                                         .GetAll(itemStatusId)
+                                        .Search(searchTerm)
                                         .OrderBy(x => x.Id);
 
             var items =
                 await PagedList<Item>.ToPagedList(query, paginationParams.PageNumber, paginationParams.PageSize);
 
             var response = _mapper.Map<List<ItemDto>>(items);
-
 
             Response.AddPaginationHeader(items.Metadata);
 

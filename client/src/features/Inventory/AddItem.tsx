@@ -3,7 +3,7 @@ import { Box } from '../../ui/Box';
 import ButtonText from '../../ui/ButtonText';
 import ItemForm from './ItemForm';
 import { useItem } from '../../api/hooks/useItem';
-import type { ItemFormData } from '../../form_schemas/itemSchema';
+import type { ItemFormData } from '../../schemas/itemSchema';
 
 export default function AddItem() {
   const navigate = useNavigate();
@@ -28,7 +28,7 @@ export default function AddItem() {
   };
 
   function onSubmit(item: ItemFormData) {
-    createItem(item)
+    createItem(item);
   }
 
   return (

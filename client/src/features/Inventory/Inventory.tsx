@@ -1,23 +1,26 @@
 import { useInventory } from '../../api/hooks/useInventory';
-import ItemRow from '../Items/ItemRow';
-import Table from '../../ui/Table';
 import Button from '../../ui/Button';
 import Header from '../../ui/Header';
 import { useNavigate } from 'react-router-dom';
-import { Box } from '../../ui/Box';
 import { usePagination } from '../../app/contexts/usePagination';
-import { Pagination } from '../../ui/Pagination';
+import Search from '../../components/Search';
+import InventoryItems from './InventoryItems';
 
 export default function Inventory() {
-  
   const navigate = useNavigate();
 
-  const { setPageNumber, setItemStatusFilter, itemStatusFilter } = usePagination();
+  const {
+    setPageNumber,
+    setItemStatusFilter,
+    setSearchTerm,
+    itemStatusFilter,
+  } = usePagination();
+
   const { itemResults, loadingItems } = useInventory(itemStatusFilter);
 
   const paginationData = itemResults?.pagination;
 
-  if (loadingItems) return 'Loading...';
+  if (loadingItems) return;
 
   function filterInventory(itemStatusId: string = '') {
     setPageNumber(1);
@@ -28,21 +31,25 @@ export default function Inventory() {
     setPageNumber(pageNumber);
   }
 
-  console.log('filter', itemStatusFilter);
-
-  // Unassigned = 1,
-  //   Assigned = 2,
-  //   TBD = 3,
-  //   Disposed = 4
+  function handleSearch(searchTerm: string) {
+    setPageNumber(1);
+    setSearchTerm(searchTerm);
+  }
 
   return (
     <>
       <Header>
-        <div className="flex justify-between mb-6">
-          <div className="w-1/3 text-sm self-end text-neutral-400">
-            Displaying {itemResults?.items?.length} items
-          </div>
-          <div className="w-1/3 flex justify-center gap-3">
+        <div className="text-end">
+          <Button
+            variation="primary"
+            onClick={() => navigate('/inventory/new')}
+          >
+            Add Inventory Item
+          </Button>
+        </div>
+        <div className="flex justify-between my-6">
+          <div className="w-1/3"></div>
+          <div className="w-1/3 flex gap-3">
             <Button
               variation="secondary"
               className="self-start"
@@ -84,48 +91,17 @@ export default function Inventory() {
               Disposal
             </Button>
           </div>
-          <div className="w-1/3 text-end">
-            <Button
-              variation="primary"
-              onClick={() => navigate('/inventory/new')}
-            >
-              Add Inventory Item
-            </Button>
+
+          <div className="w-1/4 text-end">
+            <Search onSearch={handleSearch} />
           </div>
         </div>
       </Header>
-      <Table columns=".05fr .1fr .13fr .3fr .3fr .3fr .1fr .16fr .15fr .25fr .14fr .08fr">
-        <Table.Header>
-          <Table.Cell className="font-semibold">Id</Table.Cell>
-          <Table.Cell className="font-semibold">HBC #</Table.Cell>
-          <Table.Cell className="font-semibold">Type</Table.Cell>
-          <Table.Cell className="font-semibold">Serial Number</Table.Cell>
-          <Table.Cell className="font-semibold">Description</Table.Cell>
-          <Table.Cell className="font-semibold">Computer Name</Table.Cell>
-          <Table.Cell className="font-semibold">Initiative</Table.Cell>
-          <Table.Cell className="font-semibold" align="center">
-            Cubicle/Room
-          </Table.Cell>
-          <Table.Cell className="font-semibold">Date Assigned</Table.Cell>
-          <Table.Cell className="font-semibold">Assigned User</Table.Cell>
-          <Table.Cell className="font-semibold">IP Address</Table.Cell>
-          <Table.Cell className="font-semibold" align="center">
-            Status
-          </Table.Cell>
-        </Table.Header>
-        <Table.Body
-          data={itemResults?.items as Item[]}
-          render={(item: Item) => <ItemRow key={item.id} item={item}></ItemRow>}
-        ></Table.Body>
-        <Table.Footer>
-          <Box>
-            <Pagination
-              data={paginationData}
-              setPageNumber={onSetPageNumber}
-            ></Pagination>
-          </Box>
-        </Table.Footer>
-      </Table>
+      <InventoryItems
+        items={itemResults?.items}
+        onSetPageNumber={onSetPageNumber}
+        paginationData={paginationData}
+      ></InventoryItems>
     </>
   );
 }

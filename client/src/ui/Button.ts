@@ -73,6 +73,9 @@ const Button = styled.button<ButtonProps>`
   border: none;
   border-radius: var(--border-radius-sm);
   box-shadow: var(--shadow-sm);
+  &:disabled {
+    opacity: .8;
+  }
   ${(props) => variations[props.variation]}
   ${(props) => !props.size ? sizes['medium'] : sizes[props.size]}
   ${(props) => props.selected && { outline: '2px solid var(--color-brand-600)', background: 'var(--color-grey-800)' }}

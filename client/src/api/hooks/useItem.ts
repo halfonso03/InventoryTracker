@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import agent from "../agent"
 import { formatItem } from "../../helpers/ItemHelpers";
-import type { ItemFormData } from "../../form_schemas/itemSchema";
+import type { ItemFormData } from "../../schemas/itemSchema";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 

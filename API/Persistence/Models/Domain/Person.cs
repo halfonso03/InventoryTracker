@@ -1,5 +1,7 @@
 using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.Identity.Client;
 
 namespace API.Persistence.Models.Domain;
 
@@ -17,5 +19,4 @@ public class Person : BaseEntity
     public string? Extension { get; set; }
 
     public ICollection<Item> Items { get; set; } = [];
-
 }

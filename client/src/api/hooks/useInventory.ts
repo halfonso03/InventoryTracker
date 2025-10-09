@@ -8,17 +8,20 @@ import { formatItem } from "../../helpers/ItemHelpers";
 export const useInventory = (itemStatusId?: string) => {
 
     // const queryClient = useQueryClient();
-    // const navigate = useNavigate();
-    const { pageNumber } = usePagination();
-    // const location = useLocation();
+    const { pageNumber, searchTerm } = usePagination();
+
+    // const queryKeySearchTerm = '';
+
 
     const { data: itemResults, isLoading: loadingItems } = useQuery({
-        queryKey: ['inventory', itemStatusId, pageNumber],
+        queryKey: ['inventory', itemStatusId, pageNumber, searchTerm],
         staleTime: 0,
         queryFn: async () => {
+
+            console.log('123', 123)
             const response = await agent.get<Item[]>(`/inventory/items/${itemStatusId}`,
                 {
-                    params: { pageNumber }
+                    params: { pageNumber, searchTerm }
                 }
             );
 

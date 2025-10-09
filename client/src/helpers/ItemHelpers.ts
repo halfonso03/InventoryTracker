@@ -1,4 +1,5 @@
 export function formatItem(item: Item) {
+
     const r = item;
 
     return {
@@ -7,5 +8,4 @@ export function formatItem(item: Item) {
         dateAssigned: r.dateAssigned ? new Date(r.dateAssigned) : null,
         disposalDate: r.disposalDate ? new Date(r.disposalDate) : null,
     };
-
 }
