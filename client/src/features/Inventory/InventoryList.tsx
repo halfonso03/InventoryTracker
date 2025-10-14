@@ -1,19 +1,26 @@
+import { useInventory } from '../../api/hooks/useInventory';
+import { usePagination } from '../../app/contexts/usePagination';
 import { Box } from '../../ui/Box';
 import { Pagination } from '../../ui/Pagination';
 import Table from '../../ui/Table';
 import ItemRow from '../Items/ItemRow';
 
-type Props = {
-  items: Item[] | undefined;
-  paginationData: PaginationData | undefined;
-  onSetPageNumber: (pageNumber: number) => void;
-};
+export default function InventoryList() {
+  const { setPageNumber, itemStatusFilter } = usePagination();
 
-export default function InventoryItems({
-  items,
-  paginationData,
-  onSetPageNumber,
-}: Props) {
+  const { itemResults, loadingItems } = useInventory(itemStatusFilter);
+
+  function onSetPageNumber(pageNumber: number) {
+    setPageNumber(pageNumber);
+  }
+
+  if (loadingItems) return;
+
+  const paginationData = itemResults?.pagination;
+
+  const items: Item[] | undefined = itemResults?.items;
+  console.log('itemResults', itemResults);
+
   if (!items) return;
 
   return (

@@ -16,6 +16,11 @@ export const GlobalStyles = createGlobalStyle`:root {
   }
 
 
+  :focus-visible {
+    outline: unset
+  }
+
+
 --fc-border-color: var(--color-grey-700);
 .fc-toolbar-title {
   color: var(--color-grey-300);
@@ -72,6 +77,7 @@ export const GlobalStyles = createGlobalStyle`:root {
   input,
   textarea,
   select {
+    border:1px solid var(--color-gray-700);
     background-color:var(--color-grey-900);
     width:100%;
   }
@@ -83,13 +89,27 @@ export const GlobalStyles = createGlobalStyle`:root {
     color: var(--color-grey-100);
   }
   
-  input:focus,
+  /* input:focus,
   button:focus,
   textarea:focus,
   select:focus {
     outline: 2px solid var(--color-brand-600);
     outline-offset: -1px;
-  }
+  } */
+
+    .form-element {
+
+    }
+
+
+    .form-element:focus:not(.error) {
+      outline: 2px solid var(--color-brand-600);
+      outline-offset: -1px;
+    }
+
+    .form-element.error {
+      border:2px solid var(--color-red-800)
+    }
 
   
   /* Parent selector, finally 😃 */

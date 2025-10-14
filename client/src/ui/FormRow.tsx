@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import type { FC, ReactNode } from 'react';
 import type { FieldError, FieldErrorsImpl, Merge } from 'react-hook-form';
-import { BsFillExclamationTriangleFill } from 'react-icons/bs';
+// import { BsFillExclamationTriangleFill } from 'react-icons/bs';
 
 type FormRowProps = {
   id: string;
@@ -17,8 +17,9 @@ type FormRowProps = {
 const StyledFormRow = styled.div`
   display: grid;
   align-items: center;
-  grid-template-columns: 1fr 1.6fr 0.4fr;
+  grid-template-columns: 1fr 1.6fr ; 
 
+  /* 0.4fr */
   &:first-child {
     padding-top: 0;
   }
@@ -38,17 +39,17 @@ const Label = styled.label`
   font-weight: 500;
 `;
 
-const Error = styled.div`
-  font-size: 1.5rem;
-  color: var(--color-red-500);
-`;
+// const Error = styled.div`
+//   font-size: 1.5rem;
+//   color: var(--color-red-500);
+// `;
 
 const FormRow: FC<FormRowProps> = ({
   id,
   label,
-  error,
+  // error,
   children,
-  minimalWarning = true,
+  // minimalWarning = true,
   className,
   labelBackgroundColor,
 }: FormRowProps) => {
@@ -73,15 +74,15 @@ const FormRow: FC<FormRowProps> = ({
           </Label>
         </div>
       )}
-      <div>{children}</div>
-      <div className="pl-2">
+      <div className="w-full px-6">{children}</div>
+      {/* <div className="pl-2" style={{ maxWidth: '10px' }}>
         {error && !minimalWarning && (
           <Error>
             <BsFillExclamationTriangleFill></BsFillExclamationTriangleFill>
           </Error>
         )}
         {error && minimalWarning && <Error>{error.toString()}</Error>}
-      </div>
+      </div> */}
     </StyledFormRow>
   );
 };

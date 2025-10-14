@@ -15,6 +15,7 @@ interface SelectProps {
   options: SelectOption[];
   onChange?: (e: ChangeEvent<HTMLSelectElement>) => void;
   disabled?: boolean;
+  additionalClassnames?: string;
 }
 
 interface FormSelectProps {
@@ -43,11 +44,7 @@ const sizes = {
 
 const StyledSelect = styled.select<FormSelectProps>`
   padding: 0.6rem 0.5rem;
-  border: 1px solid
-    ${(props) =>
-      props.type === 'white'
-        ? 'var(--color-grey-100)'
-        : 'var(--color-grey-700)'};
+
   color: black;
   border-radius: var(--border-radius-sm);
   background-color: transparent;
@@ -57,14 +54,38 @@ const StyledSelect = styled.select<FormSelectProps>`
   ${(props) => (!props.size ? sizes['medium'] : sizes[props.size])}
 `;
 
-function Select({ options, value, onChange, ...props }: SelectProps) {
+function Select({
+  options,
+  value,
+  onChange,
+  additionalClassnames,
+  ...props
+}: SelectProps) {
+  const classNames = ' form-element ' + additionalClassnames;
+
   return (
-    <StyledSelect value={value} onChange={onChange} {...props}>
-      {options.map((option) => (
-        <option key={option.value} value={option.value}>
-          {option.text}
-        </option>
-      ))}
+    <StyledSelect
+      value={value}
+      onChange={onChange}
+      {...props}
+      className={classNames}
+    >
+      {options.map((option) => {
+        let optionClassNames = '';
+        if (+option.value === -1) {
+          optionClassNames =
+            ' bg-slate-700 italic opacity-90 text-slate-100 py-6';
+        }
+        return (
+          <option
+            key={option.value}
+            value={option.value}
+            className={optionClassNames}
+          >
+            {option.text}
+          </option>
+        );
+      })}
     </StyledSelect>
   );
 }

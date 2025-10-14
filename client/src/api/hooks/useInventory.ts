@@ -13,21 +13,19 @@ export const useInventory = (itemStatusId?: string) => {
     // const queryKeySearchTerm = '';
 
 
-    const { data: itemResults, isLoading: loadingItems } = useQuery({
+    const { data: itemResults, isLoading: loadingItems } = useQuery<{ items: Item[], pagination: PaginationData | undefined }>({
         queryKey: ['inventory', itemStatusId, pageNumber, searchTerm],
         staleTime: 0,
         queryFn: async () => {
-
-            console.log('123', 123)
             const response = await agent.get<Item[]>(`/inventory/items/${itemStatusId}`,
                 {
                     params: { pageNumber, searchTerm }
                 }
             );
-
             const items: Item[] = response.data.map(formatItem);
             const paginationHeader = response.headers['pagination'];
             const pagination: PaginationData = paginationHeader ? JSON.parse(paginationHeader) : null;
+
             return { items, pagination };
         },
         enabled: itemStatusId != undefined

@@ -21,7 +21,7 @@ interface TableHeaderProps {
 }
 
 interface TableBodyProps {
-  data: any[];
+  data: any[] | undefined;
   render: (data: any) => React.ReactNode;
 }
 
@@ -110,7 +110,7 @@ const StyledFooter = styled.footer`
   background-color: var(--color-grey-900);
   display: flex;
   justify-content: end;
-  padding: .9rem;
+  padding: 0.9rem;
   border-top: 1px solid var(--color-gray-800);
 
   /* This will hide the footer when it contains no child elements. Possible thanks to the parent selector :has 🎉 */
@@ -153,7 +153,8 @@ const Header: FC<TableHeaderProps> = ({ children }) => {
 };
 
 const Body: FC<TableBodyProps> = ({ data, render }) => {
-  if (!data.length) return <Empty>No data to show at the moment</Empty>;
+  if (!data || !data.length)
+    return <Empty>No data to show at the moment</Empty>;
   return <StyledBody>{data.map(render)}</StyledBody>;
 };
 

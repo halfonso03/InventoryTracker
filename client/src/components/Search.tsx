@@ -9,15 +9,10 @@ type Props = {
 };
 
 const Search = ({ onSearch }: Props) => {
-  //   const [searchTerm, setSearchTerm] = useState('');
 
   const searchInputRef = useRef<HTMLInputElement>(null);
   const { searchTerm, setSearchTerm } = usePagination();
 
-  //   const handleSearchChange = (event: ChangeEvent) => {
-  //     const element = event.target as HTMLInputElement;
-  //     setSearchTerm(element.value);
-  //   };
 
   const onKeyUp = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key == 'Enter' && searchInputRef.current?.value) {
@@ -33,39 +28,36 @@ const Search = ({ onSearch }: Props) => {
   }
 
   return (
-    <div className="flex">
+    <div className="flex w-full">
       <div className="flex mx-2">
         <HiMagnifyingGlass className="self-center opacity-50"></HiMagnifyingGlass>
       </div>
-      <div className="w-4/5">
-        <Input
-          ref={searchInputRef}
-          onKeyUp={onKeyUp}
-          defaultValue={searchTerm}
-          style={{
-            padding: '.5rem  .5rem',
-            fontSize: '1rem',
-            borderRadius: '5px 0 0 5px',
-          }}
-          placeholder="Enter a search term and presss Enter..."
-        ></Input>
-      </div>
-      <div className="flex ">
-        <Button
-          variation="secondary"
-          disabled={!searchTerm}
-          onClick={clearSearch}
-          style={{
-            borderRadius: '0 5px 5px 0',
-            borderTop: '1px solid var(--color-gray-600)',
-            borderRight: '1px solid var(--color-gray-600)',
-            borderBottom: '1px solid var(--color-gray-600)',
-            borderLeft: '0',
-          }}
-        >
-          <HiXMark></HiXMark>
-        </Button>
-      </div>
+
+      <Input
+        ref={searchInputRef}
+        onKeyUp={onKeyUp}
+        defaultValue={searchTerm}
+        style={{
+          padding: '.5rem  .5rem',
+          fontSize: '1rem',
+          borderRadius: '5px 0 0 5px',
+        }}
+        placeholder="Enter a search term and presss Enter..."
+      ></Input>
+      <Button
+        variation="secondary"
+        disabled={!searchTerm}
+        onClick={clearSearch}
+        style={{
+          borderRadius: '0 5px 5px 0',
+          borderTop: '1px solid var(--color-gray-600)',
+          borderRight: '1px solid var(--color-gray-600)',
+          borderBottom: '1px solid var(--color-gray-600)',
+          borderLeft: '0',
+        }}
+      >
+        <HiXMark></HiXMark>
+      </Button>
     </div>
   );
 };
