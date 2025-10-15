@@ -88,6 +88,20 @@ export const GlobalStyles = createGlobalStyle`:root {
     background-color: var(--color-grey-800);
     color: var(--color-grey-100);
   }
+
+  select {
+  -webkit-appearance: none; /* For WebKit browsers (Chrome, Safari) */
+  -moz-appearance: none; /* For Firefox */
+  appearance: none; /* Standard property */
+}
+    select {
+      /* ... (hide default arrow) ... */
+      background-image: url("data:image/svg+xml;utf8,<svg fill='white' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");
+      background-repeat: no-repeat;
+      background-position-x: calc(100% - 10px); /* Adjust position as needed */
+      background-position-y: center;
+      padding-right: 30px; /* Add padding to prevent text overlapping the arrow */      
+    }
   
   /* input:focus,
   button:focus,
