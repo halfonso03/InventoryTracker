@@ -7,6 +7,8 @@ type Item = {
     serialNumber: string
     cubicle_Room?: string
     ipAddress?: string
+    macAddress?: string
+    cabinetOrRack?: string
     itemTypeId: number
     itemType: string
     initiativeId: number
@@ -18,7 +20,11 @@ type Item = {
     assignedToExtension?: string | null,
     itemStatusId: number,
     itemStatus: string,
-    disposalDate: Date | null
+    disposalDate: Date | null,
+    kbmsId?: string,
+    vendorId?: string,
+    driverType?: string,
+    sharedName?: string,
 }
 
 
@@ -28,7 +34,7 @@ type Person = {
     lastName: string,
     email: string,
     extension: string,
-    items: Item[] | null | undefined,
+    items?: Item[] | null | undefined,
 }
 
 type Initiative = {
@@ -42,3 +48,8 @@ type PaginationData = {
     pageSize: number;
     totalCount: number
 }
+
+type SelectOption = {
+    value: string;
+    text: string;
+};

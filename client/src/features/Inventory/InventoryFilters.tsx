@@ -18,6 +18,11 @@ export default function InventoryFilters({
     setPageNumber(1);
   }
 
+  function onSearch(searchTerm: string) {
+    setSearchTerm(searchTerm);
+    setPageNumber(1);
+  }
+
   return (
     <div className="flex justify-between w-full my-4">
       <div className="w-1/4">&nbsp;</div>
@@ -64,7 +69,7 @@ export default function InventoryFilters({
         </Button>
       </div>
       <div className="w-1/4">
-        <Search onSearch={setSearchTerm} />
+        <Search onSearch={(searchTerm: string) => onSearch(searchTerm)} />
       </div>
     </div>
   );

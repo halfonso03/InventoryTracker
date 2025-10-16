@@ -8,7 +8,7 @@ public class AppDbContext : DbContext
 {
     public required DbSet<Initiative> Initiatives { get; set; }
     public required DbSet<Item> Items { get; set; }
-    public required DbSet<Person> People { get; set; }
+    public required DbSet<Assignee> People { get; set; }
 
 
     public AppDbContext(DbContextOptions options) : base(options)
@@ -30,7 +30,7 @@ public class AppDbContext : DbContext
         {
             b.HasCheckConstraint("CK_Item_Disposal",
                 "([itemStatusId] <> 4 AND [DisposalDate] IS NULL) OR ([itemStatusId] = 4 AND NOT [DisposalDate] IS NULL)");
-            
+
         });
 
         base.OnModelCreating(builder);

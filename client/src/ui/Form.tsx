@@ -7,10 +7,11 @@ const Form = styled.form<FormProps>`
   ${(props) =>
     props.type === 'regular' &&
     css`
-      /* padding: 2rem; */
+      /* background-color: var(--color-grey-1000);  */
+      /* border: 1px solid var(--color-grey-800); */
+      /* padding: 1rem; */
       /* Box */
-      /* background-color: var(--color-grey-1000); */
-      /* border: 1px solid var(--color-grey-800);
+     
       border-radius: var(--border-radius-md); */
     `}
 

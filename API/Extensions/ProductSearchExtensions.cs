@@ -15,6 +15,7 @@ public static class ProductSearchExtensions
             || (!string.IsNullOrEmpty(x.SerialNumber) && x.SerialNumber.Contains(searchTerm))
             || (!string.IsNullOrEmpty(x.IPAddress) && x.IPAddress.Contains(searchTerm))
             || (!string.IsNullOrEmpty(x.Cubicle_Room) && x.Cubicle_Room.Contains(searchTerm))
+            || (x.ItemType.ToString().Contains(searchTerm))
             || (x.AssignedTo != null && x.AssignedTo.FirstName.Contains(searchTerm))
             || (x.AssignedTo != null && x.AssignedTo.LastName.Contains(searchTerm)));
     }

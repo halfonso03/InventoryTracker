@@ -9,9 +9,9 @@ public class DbInitializer
 {
     public static async Task SeedData(AppDbContext context)
     {
-        var person1 = new Person { FirstName = "Bob", LastName = "Ferry", Email = "b@test.com" };
-        var person2 = new Person { FirstName = "Rick", LastName = "Sanchez", Email = "r@test.com" };
-        var person3 = new Person { FirstName = "Mary", LastName = "Kay", Email = "m@test.com" };
+        var person1 = new Assignee { FirstName = "Bob", LastName = "Ferry", Email = "b@test.com", AssigneeType = AssigneeType.Person };
+        var person2 = new Assignee { FirstName = "Rick", LastName = "Sanchez", Email = "r@test.com" , AssigneeType = AssigneeType.Person};
+        var person3 = new Assignee { FirstName = "Mary", LastName = "Kay", Email = "m@test.com", AssigneeType = AssigneeType.Person };
 
         if (!context.People.Any())
         {

@@ -15,11 +15,13 @@ namespace API.Controllers
     public class InventoryController : BaseApiController
     {
         private readonly IItemService _itemDataService;
+        private readonly IDataService<Assignee> _assigneeDataService;
         private readonly IMapper _mapper;
 
-        public InventoryController(IItemService itemDataService, IMapper mapper)
+        public InventoryController(IItemService itemDataService, IDataService<Assignee> assigneeDataService, IMapper mapper)
         {
             _itemDataService = itemDataService;
+            _assigneeDataService = assigneeDataService;
             _mapper = mapper;
         }
 
@@ -117,6 +119,28 @@ namespace API.Controllers
                     Item? item = await _itemDataService.ToggleDisposal(id);
 
                     return item is not null ? Ok(item) : NotFound();
+                }
+                catch (Exception ex)
+                {
+                    return BadRequest(ex.InnerException?.Message);
+                }
+            }
+
+            return BadRequest(ModelState.SelectMany(x => x.Key));
+        }
+
+        [HttpPost("assignee/add")]
+        public async Task<IActionResult> AddAssignee(AssigneeDto assigneeDto)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    var assignee = _mapper.Map<Assignee>(assigneeDto);
+
+                    var result = await _assigneeDataService.Create(assignee);
+
+                    return Ok(result);
                 }
                 catch (Exception ex)
                 {

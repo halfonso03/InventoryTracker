@@ -15,6 +15,9 @@ import { formatDate } from 'date-fns';
 import { Box } from '../../ui/Box';
 import Button from '../../ui/Button';
 import Modal from '../../components/Modal';
+import PersonModal from '../Person/PersonModal';
+import type { AssigneeFormData } from '../../schemas/personSchema';
+import useAssignments from '../../api/hooks/useAssignment';
 // import { useItem } from '../../api/hooks/useItem';
 
 type Props = {
@@ -27,9 +30,10 @@ export default function ItemForm({ item, submit, toggleDisposal }: Props) {
   const { people } = usePeople();
   const { initiatives } = useInitiative();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const { createAssignee } = useAssignments();
 
   if (item) {
-    // console.log('item', item);
+    console.log('item', item.itemTypeId);
   }
 
   const peopleOptions = people
@@ -47,7 +51,7 @@ export default function ItemForm({ item, submit, toggleDisposal }: Props) {
 
   const updatedPeopleOptions = [
     { value: '0', text: 'Unassigned' },
-    { value: '-1', text: 'Add User' },
+    { value: '-1', text: 'Add Assignee' },
     ...peopleOptions,
   ];
 
@@ -83,6 +87,7 @@ export default function ItemForm({ item, submit, toggleDisposal }: Props) {
       initiativeId: item?.initiativeId ?? 0,
       cubicle_Room: item?.cubicle_Room,
       itemTypeId: item?.itemTypeId,
+      macAddress: item?.macAddress,
     },
   });
 
@@ -99,7 +104,16 @@ export default function ItemForm({ item, submit, toggleDisposal }: Props) {
     console.log('validation errors', errors, getValues());
   }
 
+  function onAddPerson(e: AssigneeFormData) {
+    console.log('e', e);
+    createAssignee(e);
+  }
+
   useEffect(() => {
+    if (item && item?.id > 0) {
+      setValue('itemTypeId', item?.itemTypeId);
+    }
+
     if (peopleOptions?.length > 0 && item?.assignedToId) {
       setValue('assignedToId', item.assignedToId);
     }
@@ -117,7 +131,7 @@ export default function ItemForm({ item, submit, toggleDisposal }: Props) {
         onSubmit={handleSubmit(onSubmit, onError)}
       >
         <div className="flex w-full">
-          <div className="w-2/5">
+          <div className="w-1/3">
             <FormRow label="Id" id="Item Id">
               <Input
                 readOnly
@@ -217,8 +231,16 @@ export default function ItemForm({ item, submit, toggleDisposal }: Props) {
                 {...register('ipAddress')}
               ></Input>
             </FormRow>
+            <FormRow label="MAC Address" id="macAddress">
+              <Input
+                type="text"
+                id="macAddress"
+                defaultValue={item.macAddress}
+                {...register('macAddress')}
+              ></Input>
+            </FormRow>
           </div>
-          <div className="w-2/5">
+          <div className="w-1/3">
             <FormRow label="Initiative" id="initiativeId">
               <Select
                 {...register('initiativeId')}
@@ -253,8 +275,69 @@ export default function ItemForm({ item, submit, toggleDisposal }: Props) {
                 }}
               ></Select>
             </FormRow>
+            <FormRow label="Cabinet/Rack" id="cabinetOrRack">
+              <Input
+                type="text"
+                id="cabinetOrRack"
+                defaultValue={item.cabinetOrRack}
+                {...register('cabinetOrRack')}
+                className={
+                  ' form-element ' +
+                  (errors?.cabinetOrRack?.message ? ' error ' : '')
+                }
+              ></Input>
+            </FormRow>
+            <FormRow label="KBMS ID" id="kbmsId">
+              <Input
+                type="text"
+                id="kbmsId"
+                defaultValue={item.kbmsId}
+                {...register('kbmsId')}
+                className={
+                  ' form-element ' + (errors?.kbmsId?.message ? ' error ' : '')
+                }
+              ></Input>
+            </FormRow>
+            <FormRow label="Vendor ID" id="vendorId">
+              <Input
+                type="text"
+                id="vendorId"
+                defaultValue={item.vendorId}
+                {...register('vendorId')}
+                className={
+                  ' form-element ' +
+                  (errors?.vendorId?.message ? ' error ' : '')
+                }
+              ></Input>
+            </FormRow>
+            <FormRow label="Driver Type" id="driverType">
+              <Input
+                type="text"
+                id="driverType"
+                defaultValue={item.driverType}
+                {...register('driverType')}
+                className={
+                  ' form-element ' +
+                  (errors?.driverType?.message ? ' error ' : '')
+                }
+              ></Input>
+            </FormRow>
+            <FormRow label="Shared Name" id="sharedName">
+              <Input
+                type="text"
+                id="sharedName"
+                defaultValue={item.sharedName}
+                {...register('sharedName')}
+                className={
+                  ' form-element ' +
+                  (errors?.sharedName?.message ? ' error ' : '')
+                }
+              ></Input>
+            </FormRow>
+          </div>
+          <div className="w-1/4 flex flex-col">
             {item.id != 0 && (
-              <FormRow label="Date Created" id="dateCreated">
+              <FormRow label="Date Added" id="dateCreated">
                 <Input
                   type="text"
                   disabled={true}
@@ -290,20 +373,17 @@ export default function ItemForm({ item, submit, toggleDisposal }: Props) {
               ></Input>
             </FormRow>
             {item.id != 0 && (
-              <FormRow label="&nbsp;" id="">
-                <Box className="flex w-full justify-end my-4">
-                  <Button
-                    variation="danger"
-                    type="button"
-                    className="w-[15rem]"
-                    // disabled={toggleDisposal.isPending}
-                    onClick={toggleDisposal}
-                  >
-                    {item.itemStatusId == 4
-                      ? 'Remove from Disposal'
-                      : 'Move to Disposal'}
-                  </Button>
-                </Box>
+              <FormRow label="&nbsp;" id="" style={{ marginTop: 'auto' }}>
+                <Button
+                  variation="danger"
+                  type="button"
+                  className="w-[15rem]"
+                  onClick={toggleDisposal}
+                >
+                  {item.itemStatusId == 4
+                    ? 'Remove from Disposal'
+                    : 'Move to Disposal'}
+                </Button>
               </FormRow>
             )}
           </div>
@@ -315,45 +395,20 @@ export default function ItemForm({ item, submit, toggleDisposal }: Props) {
           </Box>
         </div>
       </Form>
-      
+
       {isModalOpen && (
         <Modal
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}
-          title="Add New User"
+          title="Add Assignee"
         >
-          <Form className="flex-col w-full text-gray-50">
-            <FormRow id="firstName" label="First Name">
-              <Input id="firstName"></Input>
-            </FormRow>
-            <FormRow id="lastName" label="Last Name">
-              <Input id="lastName"></Input>
-            </FormRow>
-            <FormRow id="email" label="Email">
-              <Input id="email"></Input>
-            </FormRow>
-            <FormRow id="extension" label="Extension">
-              <Input id="extension"></Input>
-            </FormRow>
-            <FormRow label=" " id="none">
-              <Box className="flex gap-2 justify-end my-2">
-                <Button variation="primary" content="Save">
-                  Save
-                </Button>
-                <Button
-                  variation="secondary"
-                  content="Cancel"
-                  type="button"
-                  onClick={() => {
-                    setValue('assignedToId', 0);
-                    setIsModalOpen(false);
-                  }}
-                >
-                  Cancel
-                </Button>
-              </Box>
-            </FormRow>
-          </Form>
+          <PersonModal
+            addPerson={onAddPerson}
+            cancelModal={() => {
+              setValue('assignedToId', 0);
+              setIsModalOpen(false);
+            }}
+          ></PersonModal>
         </Modal>
       )}
     </div>

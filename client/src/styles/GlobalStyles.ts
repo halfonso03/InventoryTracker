@@ -122,7 +122,7 @@ export const GlobalStyles = createGlobalStyle`:root {
     }
 
     .form-element.error {
-      border:2px solid var(--color-red-800)
+      border:2px solid var(--color-red-600)
     }
 
   

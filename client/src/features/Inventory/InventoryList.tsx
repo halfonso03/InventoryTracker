@@ -19,14 +19,12 @@ export default function InventoryList() {
   const paginationData = itemResults?.pagination;
 
   const items: Item[] | undefined = itemResults?.items;
-  console.log('itemResults', itemResults);
 
   if (!items) return;
 
   return (
-    <Table columns=".05fr .1fr .13fr .3fr .3fr .3fr .1fr .16fr .15fr .25fr .14fr .08fr">
+    <Table columns=".1fr .12fr .25fr .25fr .25fr .1fr .16fr .2fr .14fr .17fr .14fr ">
       <Table.Header>
-        <Table.Cell className="font-semibold">Id</Table.Cell>
         <Table.Cell className="font-semibold">HBC #</Table.Cell>
         <Table.Cell className="font-semibold">Type</Table.Cell>
         <Table.Cell className="font-semibold">Serial Number</Table.Cell>
@@ -36,12 +34,14 @@ export default function InventoryList() {
         <Table.Cell className="font-semibold" align="center">
           Cubicle/Room
         </Table.Cell>
-        <Table.Cell className="font-semibold">Date Assigned</Table.Cell>
+        {/* <Table.Cell className="font-semibold">Date Assigned</Table.Cell> */}
         <Table.Cell className="font-semibold">Assigned User</Table.Cell>
         <Table.Cell className="font-semibold">IP Address</Table.Cell>
-        <Table.Cell className="font-semibold" align="center">
+        <Table.Cell className="font-semibold">MAC Address</Table.Cell>
+        <Table.Cell className="font-semibold">Cabinet/Rack</Table.Cell>
+        {/* <Table.Cell className="font-semibold" align="center">
           Status
-        </Table.Cell>
+        </Table.Cell> */}
       </Table.Header>
       <Table.Body
         data={items}

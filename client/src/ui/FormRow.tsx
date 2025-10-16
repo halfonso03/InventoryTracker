@@ -12,12 +12,13 @@ type FormRowProps = {
   swidth?: string | null;
   className?: string;
   labelBackgroundColor?: string;
+  style?: object;
 };
 
 const StyledFormRow = styled.div`
   display: grid;
   align-items: center;
-  grid-template-columns: 1fr 1.6fr ; 
+  grid-template-columns: 1fr 1.6fr;
 
   /* 0.4fr */
   &:first-child {
@@ -52,15 +53,15 @@ const FormRow: FC<FormRowProps> = ({
   // minimalWarning = true,
   className,
   labelBackgroundColor,
+  style,
 }: FormRowProps) => {
   return (
-    <StyledFormRow style={{}} className={className}>
+    <StyledFormRow style={style} className={className}>
       {label && (
         <div
           style={{
             padding: '10px 10px 10px 10px',
             background: labelBackgroundColor,
-            marginRight: '10px',
           }}
         >
           <Label

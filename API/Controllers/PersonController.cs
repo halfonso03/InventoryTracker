@@ -11,12 +11,12 @@ namespace API.Controllers
 {
     public class PersonController : BaseApiController
     {
-        private readonly IDataService<Person> _dataService;
+        private readonly IDataService<Assignee> _dataService;
         private readonly IMapper _mapper;
 
         private readonly IItemService _itemService;
 
-        public PersonController(IDataService<Person> dataService, IMapper mapper, IItemService itemService)
+        public PersonController(IDataService<Assignee> dataService, IMapper mapper, IItemService itemService)
         {
             _dataService = dataService;
             _mapper = mapper;
@@ -28,7 +28,7 @@ namespace API.Controllers
         {
             var people = await _dataService.GetAll();
 
-            var response = _mapper.Map<List<Person>>(people);
+            var response = _mapper.Map<List<Assignee>>(people);
 
             return Ok(response);
         }
@@ -42,7 +42,7 @@ namespace API.Controllers
             {
                 try
                 {
-                    var person = _mapper.Map<Person>(personDto);
+                    var person = _mapper.Map<Assignee>(personDto);
 
                     await _dataService.Create(person);
 
@@ -65,7 +65,7 @@ namespace API.Controllers
             {
                 try
                 {
-                    var person = _mapper.Map<Person>(personDto);
+                    var person = _mapper.Map<Assignee>(personDto);
 
                     await _dataService.Update(person.Id, person);
 

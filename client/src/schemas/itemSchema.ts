@@ -9,8 +9,14 @@ export interface ItemFormSchema {
     assignedToId?: number | null | undefined
     serialNumber?: string | null | undefined
     ipAddress?: string | null | undefined
+    macAddress?: string | null | undefined
     initiativeId?: number | undefined | null
     cubicle_Room?: string | null | undefined,
+    cabinetOrRack?: string | null | undefined,
+    kbmsId?: string | null | undefined,
+    vendorId?: string | null | undefined,
+    driverType?: string | null | undefined,
+    sharedName?: string | null | undefined,
 }
 
 
@@ -23,19 +29,15 @@ export interface ItemFormData {
     assignedToId?: number | null
     serialNumber?: string | null
     ipAddress?: string | null
+    macAddress?: string | null
+    cabinetOrRack?: string | null,
     initiativeId?: number | undefined | null
     cubicle_Room?: string | null,
-
-
-    // serialNumber: string
-    // cubicle_Room?: string
-    // itemTypeId: number
-    // initiativeId: number
-    // assignedToId: number
+    kbmsId?: string | null,
+    vendorId?: string | null,
+    driverType?: string | null,
+    sharedName?: string | null,
 }
-
-
-
 
 
 export const itemFormSchema = Yup.object().shape({
@@ -58,7 +60,13 @@ export const itemFormSchema = Yup.object().shape({
     cubicle_Room: Yup.string().nullable(),
     initiativeId: Yup.number().nullable(),
     serialNumber: Yup.string().nullable(),
-    ipAddress: Yup.string().nullable()
+    ipAddress: Yup.string().nullable(),
+    macAddress: Yup.string().nullable(),
+    cabinetOrRack: Yup.string().nullable(),
+    kbmsId: Yup.string().nullable(),
+    vendorId: Yup.string().nullable(),
+    driverType: Yup.string().nullable(),
+    sharedName: Yup.string().nullable()
 })
 
 

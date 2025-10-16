@@ -9,10 +9,8 @@ type Props = {
 };
 
 const Search = ({ onSearch }: Props) => {
-
   const searchInputRef = useRef<HTMLInputElement>(null);
   const { searchTerm, setSearchTerm } = usePagination();
-
 
   const onKeyUp = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key == 'Enter' && searchInputRef.current?.value) {

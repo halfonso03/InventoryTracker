@@ -2,11 +2,6 @@ import type { ChangeEvent } from 'react';
 import styled, { css } from 'styled-components';
 type Sizes = 'small' | 'medium' | 'large';
 
-type SelectOption = {
-  value: string;
-  text: string;
-};
-
 interface SelectProps {
   id: string;
   type: string;

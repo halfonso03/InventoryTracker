@@ -4,6 +4,7 @@ using API.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace API.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251016134740_cbrack")]
+    partial class cbrack
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -104,9 +107,6 @@ namespace API.Migrations
                     b.Property<DateTime?>("DisposalDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("DriverType")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("HbcNumber")
                         .HasColumnType("nvarchar(max)");
 
@@ -124,19 +124,10 @@ namespace API.Migrations
                         .HasColumnType("int")
                         .HasColumnName("ItemTypeId");
 
-                    b.Property<string>("KbmsId")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("MacAddress")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("SerialNumber")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("SharedName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("VendorId")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");

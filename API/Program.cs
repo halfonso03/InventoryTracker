@@ -29,7 +29,7 @@ builder.Services.AddAutoMapper(config => config.AddProfile<MappingProfiles>());
 
 builder.Services.AddTransient<IItemService, ItemService>();
 builder.Services.AddTransient<IDataService<Initiative>, DataService<Initiative>>();
-builder.Services.AddTransient<IDataService<Person>, DataService<Person>>();
+builder.Services.AddTransient<IDataService<Assignee>, DataService<Assignee>>();
 
 builder.Services.AddCors(opt =>
             {

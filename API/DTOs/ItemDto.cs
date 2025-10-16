@@ -33,6 +33,8 @@ public class ItemDto
     public string? AssignedToExtension { get; set; }
     public string? Cubicle_Room { get; set; }
     public string? IPAddress { get; set; }
+    public string? MacAddress { get; set; }
+    public string? CabinetOrRack { get; set; }
     public DateTime CreatedOn { get; set; }
 
 }

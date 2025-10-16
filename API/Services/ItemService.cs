@@ -11,7 +11,7 @@ namespace API.Services;
 
 public interface IItemService : IDataService<Item>
 {
-    Task<Person?> GetPersonItems(int id);
+    Task<Assignee?> GetPersonItems(int id);
     IQueryable<Item> GetAll(ItemStatus? itemStatus);
 
     Task<Item?> ToggleDisposal(int id);
@@ -55,6 +55,7 @@ public class ItemService(AppDbContext context) : IItemService
 
         context.Items.Add(entity);
         await context.SaveChangesAsync();
+        
         return entity.Id;
     }
 
@@ -67,14 +68,13 @@ public class ItemService(AppDbContext context) : IItemService
 
         if (itemFromDb is not null)
         {
-
             itemFromDb.HbcNumber = entity.HbcNumber;
             itemFromDb.ItemType = entity.ItemType;
             itemFromDb.Description = entity.Description;
             itemFromDb.SerialNumber = entity.SerialNumber;
             itemFromDb.IPAddress = entity.IPAddress;
+            itemFromDb.MacAddress = entity.MacAddress;
             itemFromDb.ComputerName = entity.ComputerName;
-
             itemFromDb.InitiativeId = entity.InitiativeId;
             itemFromDb.Cubicle_Room = entity.Cubicle_Room;
 
@@ -103,7 +103,7 @@ public class ItemService(AppDbContext context) : IItemService
         return true;
     }
 
-    public async Task<Person?> GetPersonItems(int id)
+    public async Task<Assignee?> GetPersonItems(int id)
     {
         var person = await context.People
                     .Include(x => x.Items)
